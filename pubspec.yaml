@@ -9,5 +9,7 @@ description: >
   standard tag. Shadow DOM is designed to provide encapsulation for custom
   elements, by hiding DOM subtrees under shadow roots. HTML Imports let authors
   bundle code and HTML as if they were libraries.
+dev_dependencies:
+  unittest: '>0.11.0 <0.12.0'
 environment:
   sdk: ">=1.4.0-dev.6.6 <2.0.0"

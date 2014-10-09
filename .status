@@ -14,10 +14,10 @@
 build/*: Skip  # nothing requires pub-build
 
 [ $compiler == none && ($runtime == dartium || $runtime == ContentShellOnAndroid) ]
-web_components/test/interop_test: Pass, RuntimeError # Issue 18931
+test/interop_test: Pass, RuntimeError # Issue 18931
 
 [ $compiler == dart2js && $csp && $runtime == drt ]
-web_components/test/interop_test: Fail # Issue 19329
+test/interop_test: Fail # Issue 19329
 
 [ $runtime == vm || $runtime == d8 || $runtime == jsshell ]
-web_components/test/*: Skip # uses dart:html
+test/*: Skip # uses dart:html

@@ -1,15 +1,5 @@
 # Web Components
 
-# NOTE: This repo is currently inactive
-
-This repo is a copy of the `web_components` package. This copy is not currently in
-active use.  The code is still being developed in the main Dart repo under
-`branches/bleeding_edge/dart/pkg/web_components/`. We are in the process of moving the
-code here, but you may find the sources here to be stale. Pull requests will not
-be merged here until the migration is complete. 
-
-# END NOTE
-
 This package has the polyfills for
 [Shadow DOM](http://www.polymer-project.org/platform/shadow-dom.html),
 [Custom Elements](http://www.polymer-project.org/platform/custom-elements.html),

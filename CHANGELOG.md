@@ -1,3 +1,12 @@
+#### 0.10.1
+  * Added the `CustomElementProxy` annotation. This can be added to any class
+    which proxies a javascript custom element and is the equivalent of calling
+    `registerDartType`. In order to use this you will need to be using the
+    `initialize` package, and call its `run` method from your main function. It
+    is also recommended that you include the transformer from that package to
+    remove the use of mirrors at runtime, see
+    [initialize](https://github.com/dart-lang/initialize) for more information.
+
 #### 0.10.0
   * Updated to the `0.5.1` js version.
   * **Breaking Change** To remain consistent with the js repository all the

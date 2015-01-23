@@ -1,5 +1,5 @@
 name: web_components
-version: 0.10.0
+version: 0.10.1
 author: Polymer.dart Authors <web-ui-dev@dartlang.org>
 homepage: https://www.dartlang.org/polymer-dart/
 description: >
@@ -9,8 +9,14 @@ description: >
   standard tag. Shadow DOM is designed to provide encapsulation for custom
   elements, by hiding DOM subtrees under shadow roots. HTML Imports let authors
   bundle code and HTML as if they were libraries.
+dependencies:
+  initialize: '>=0.2.0 <0.3.0'
 dev_dependencies:
   unittest: '>0.11.0 <0.12.0'
   browser: '>0.10.0 <0.11.0'
+transformers:
+- initialize:
+    entry_point: test/custom_element_proxy_test.dart
+    html_entry_point: test/custom_element_proxy_test.html
 environment:
   sdk: ">=1.4.0-dev.6.6 <2.0.0"

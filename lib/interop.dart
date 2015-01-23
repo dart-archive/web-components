@@ -6,7 +6,6 @@
 /// This will not work unless `dart_support.js` is loaded.
 library web_components.interop;
 
-import 'dart:async' show Stream, StreamController;
 import 'dart:html' show document, Element;
 import 'dart:js' show JsObject, JsFunction;
 
@@ -27,8 +26,8 @@ void registerDartType(String tagName, Type dartType, {String extendsTag}) {
         "available before calling this function.");
   }
 
-  var upgrader = document.createElementUpgrader(
-      dartType, extendsTag: extendsTag);
+  var upgrader =
+      document.createElementUpgrader(dartType, extendsTag: extendsTag);
 
   // Unfortunately the dart:html upgrader will throw on an already-upgraded
   // element, so we need to duplicate the type check to prevent that.

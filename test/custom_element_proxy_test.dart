@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 library custom_element_proxy_test;
 
+import 'dart:async';
 import 'dart:html';
 import 'dart:js';
 import 'package:initialize/initialize.dart' as init;
@@ -33,7 +34,7 @@ class ExtendedElement extends InputElement {
 
 main() {
   useHtmlConfiguration();
-  init.run();
+  init.run().then((_) {
 
   var container = querySelector('#container') as DivElement;
 
@@ -44,20 +45,32 @@ main() {
   test('basic custom element', () {
     container.append(new BasicElement());
     container.appendHtml('<basic-element></basic_element>');
-    var elements = container.querySelectorAll('basic-element');
-    for (var element in elements) {
-      expect(element.runtimeType, BasicElement);
-      expect(element.isBasicElement, isTrue);
-    }
+    // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
+    // why? https://github.com/dart-lang/web-components/issues/4
+    return new Future(() {}).then((_) {
+      var elements = container.querySelectorAll('basic-element');
+      expect(elements.length, 2);
+      for (BasicElement element in elements) {
+        print(element.outerHtml);
+        print(element.runtimeType);
+        expect(element.isBasicElement, isTrue);
+      }
+    });
   });
 
   test('extends custom element', () {
     container.append(new ExtendedElement());
     container.appendHtml('<input is="extended-element" />');
-    var elements = container.querySelectorAll('extended-element');
-    for (var element in elements) {
-      expect(element.runtimeType, ExtendedElement);
-      expect(element.isExtendedElement, isTrue);
-    }
+    // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
+    // why? https://github.com/dart-lang/web-components/issues/4
+    return new Future(() {}).then((_) {
+      var elements = container.querySelectorAll('input');
+      expect(elements.length, 2);
+      for (ExtendedElement element in elements) {
+        expect(element.isExtendedElement, isTrue);
+      }
+    });
+  });
+
   });
 }

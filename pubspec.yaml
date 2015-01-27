@@ -28,5 +28,8 @@ transformers:
 - initialize:
     entry_point: test/html_import_annotation_test.dart
     html_entry_point: test/html_import_annotation_test.html
+- web_components/build/html_import_annotation_inliner:
+    bootstrap_file: test/html_import_annotation_test.bootstrap.dart
+    html_entry_point: test/html_import_annotation_test.html
 environment:
   sdk: ">=1.4.0-dev.6.6 <2.0.0"

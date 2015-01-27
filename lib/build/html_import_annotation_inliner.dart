@@ -63,8 +63,8 @@ class HtmlImportAnnotationInliner extends AggregateTransformer {
         var leftoverMatches = _htmlImportGeneral.allMatches(newDartCode);
         for (var match in leftoverMatches) {
           _logger.warning('Found HtmlImport constructor which was supplied an '
-              'expression. Only raw strings are currently supported: '
-              '${match.group(0)}');
+              'expression. Only raw strings are currently supported for the '
+              'transformer, so ${match.group(1)} will be injected dynamically');
         }
         transform.addOutput(
             new Asset.fromString(dartEntryPoint.id, newDartCode));
@@ -93,5 +93,5 @@ class HtmlImportAnnotationInliner extends AggregateTransformer {
   // Matches HtmlImport initializers which are supplied any arguments. This
   // is used to detect if any were left over and not inlined.
   final RegExp _htmlImportGeneral = new RegExp(
-      r"\n\s*new InitEntry\(const i[\d]*\.HtmlImport\('([\w\.].*)'\),\s.*\),");
+      r"\n\s*new InitEntry\(const i[\d]*\.HtmlImport\(([\w\d\.]*)\),\s.*\),");
 }

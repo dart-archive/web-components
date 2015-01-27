@@ -2,7 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 @HtmlImport(importPath)
-@HtmlImport(badImportPath)
+ // This one will throw a build time warning, but should still work dynamically.
+@HtmlImport('bad_import.html')
 library web_components.test.html_import_annotation;
 
 import 'dart:html';
@@ -13,7 +14,6 @@ import 'package:web_components/html_import_annotation.dart';
 
 
 const String importPath = 'my_import.html';
-const String badImportPath = 'bad_import.html';
 
 main() {
   useHtmlConfiguration();
@@ -22,7 +22,7 @@ main() {
     return init.run().then((_) {
       var good = document.head.querySelector('link[href="$importPath"]');
       expect(good.import.body.text, 'Hello world!\n');
-      var bad = document.head.querySelector('link[href="$badImportPath"]');
+      var bad = document.head.querySelector('link[href="bad_import.html"]');
       expect(bad.import, isNull);
     });
   });

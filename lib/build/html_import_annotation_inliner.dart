@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:barback/barback.dart';
 import 'package:html5lib/dom.dart' as dom;
 import 'package:html5lib/parser.dart';
-import 'package:path/path.dart' as path;
+import '../src/normalize_path.dart';
 
 /// Given an html entry point with a single dart bootstrap file created by the
 /// `initialize` transformer, this will open that dart file and remove all
@@ -53,9 +53,11 @@ class HtmlImportAnnotationInliner extends AggregateTransformer {
       var importPaths;
       return dartEntryPoint.readAsString().then((dartCode) {
         var matches = _htmlImportWithRawString.allMatches(dartCode);
-        importPaths = new Set.from(matches.map((match) =>  _normalizePath(
-            match.group(1), match.group(2), match.group(3),
-            htmlEntryPoint.id.package)));
+        importPaths = new Set.from(matches.map((match) =>
+            normalizeHtmlImportPath(
+                match.group(1),
+                match.group(2) == 'null' ? null : match.group(2),
+                match.group(3))));
 
         var newDartCode = dartCode.replaceAll(_htmlImportWithRawString, '');
         var leftoverMatches = _htmlImportGeneral.allMatches(newDartCode);
@@ -79,38 +81,6 @@ class HtmlImportAnnotationInliner extends AggregateTransformer {
             new Asset.fromString(htmlEntryPoint.id, doc.outerHtml));
       });
     });
-  }
-
-  String _normalizePath(String htmlPath, String dartFilePackage,
-       String dartFilePath, String rootDartPackage) {
-    // If they already supplied a packages path, just return that.
-    if (htmlPath.startsWith('package:')) {
-      return htmlPath.replaceFirst('package:', 'packages/');
-    }
-
-    var dartFileDir = path.url.dirname(dartFilePath);
-    var dartFileDirSegments = path.url.split(dartFileDir);
-    var inLibDir = dartFileDirSegments[0] == 'lib';
-    // The dartFileDir without the leading dir.
-    var dartFileSubDir = path.url.joinAll(
-        dartFileDirSegments.getRange(1, dartFileDirSegments.length));
-
-    // Relative path to something not under lib. All other paths will be turned
-    // into a packages/ path.
-    if (dartFilePackage == 'null' && !inLibDir) {
-      return path.url.normalize(path.url.join(dartFileSubDir, htmlPath));
-    }
-
-    if (!inLibDir) {
-      _logger.error('Can only import assets from a folder other than `lib` if '
-          'they are in the same package as the entry point. Found '
-          '$dartFilePackage:$dartFilePath');
-    }
-
-    // Only option left is a packages/ path.
-    var package = dartFilePackage == 'null' ? rootDartPackage : dartFilePackage;
-    return path.url.normalize(
-        path.url.join('packages/', package, dartFileSubDir, htmlPath));
   }
 
   // Matches HtmlImport constructors which are supplied a raw string. These are

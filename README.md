@@ -6,7 +6,7 @@ This package has the polyfills for
 and [HTML Imports](http://www.polymer-project.org/platform/html-imports.html).
 
 These features exist in dart:html, for example
-[Element.reateShadowRoot](https://api.dartlang.org/apidocs/channels/stable/#dart-dom-html.Element@id_createShadowRoot)
+[Element.createShadowRoot](https://api.dartlang.org/apidocs/channels/stable/#dart-dom-html.Element@id_createShadowRoot)
 and [Document.register](https://api.dartlang.org/apidocs/channels/stable/#dart-dom-html.HtmlDocument@id_register).
 However those APIs are not supported on all browsers yet unless you
 load the polyfills, as indicated below.

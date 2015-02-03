@@ -1,5 +1,5 @@
 name: web_components
-version: 0.10.1
+version: 0.10.2-dev
 author: Polymer.dart Authors <web-ui-dev@dartlang.org>
 homepage: https://www.dartlang.org/polymer-dart/
 description: >
@@ -10,13 +10,23 @@ description: >
   elements, by hiding DOM subtrees under shadow roots. HTML Imports let authors
   bundle code and HTML as if they were libraries.
 dependencies:
-  initialize: '>=0.2.0 <0.3.0'
+  analyzer: '>=0.22.4 <0.23.0'
+  html5lib: '>=0.12.0 <0.13.0'
+  initialize: '>=0.3.1 <0.4.0'
+  path: '>=1.3.0 <2.0.0'
 dev_dependencies:
+  code_transformers: '>=0.2.4 <0.3.0'
   unittest: '>0.11.0 <0.12.0'
   browser: '>0.10.0 <0.11.0'
 transformers:
 - initialize:
     entry_point: test/custom_element_proxy_test.dart
     html_entry_point: test/custom_element_proxy_test.html
+- initialize:
+    entry_point: test/html_import_annotation_test.dart
+    html_entry_point: test/html_import_annotation_test.html
+- web_components/build/html_import_annotation_inliner:
+    bootstrap_file: test/html_import_annotation_test.bootstrap.dart
+    html_entry_point: test/html_import_annotation_test.html
 environment:
   sdk: ">=1.4.0-dev.6.6 <2.0.0"

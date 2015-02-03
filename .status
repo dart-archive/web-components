@@ -23,3 +23,7 @@ build/test/*: Skip # uses dart:html
 
 [ $compiler == dart2js ]
 test/*: Skip # use pub-build to run tests (they need the companion .html file)
+
+[ $browser ]
+test/build/*: Skip # vm only tests
+build/test/build/*: Skip # vm only tests

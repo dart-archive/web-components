@@ -1,3 +1,27 @@
+#### 0.10.2-dev
+  * Added the `HtmlImport` annotation. This can be added to any library
+    declaration and it will inject an html import to the specified path into the
+    head of the current document, which allows dart files to declare their html
+    dependencies. Paths can be relative to the current dart file or they can be
+    in `package:` form.
+
+    *Note*: Html imports included this way cannot contain dart script tags. The
+    mirror based implementation injects the imports dynamically and dart script
+    tags are not allowed to be injected in that way.
+
+    There is also a transformer supplied which will inline these imports into
+    the head of your document at compile time, it can be used like this:
+
+      transformers:
+      # Must include the `initialize` transformer first.
+      - initialize:
+          entry_point: web/index.dart
+          html_entry_point: web/index.html
+      - web_components/build/html_import_annotation_inliner:
+          # The bootstrap file created by the `initialize` transformer.
+          bootstrap_file: test/index.bootstrap.dart
+          html_entry_point: test/index.html
+
 #### 0.10.1
   * Added the `CustomElementProxy` annotation. This can be added to any class
     which proxies a javascript custom element and is the equivalent of calling

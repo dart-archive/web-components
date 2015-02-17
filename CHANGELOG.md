@@ -19,10 +19,10 @@
     annotations) into the head of your document at compile time, it can be used
     like this:
 
-      transformers:
-      - web_components:
-          entry_points:
-            - web/index.html
+        transformers:
+        - web_components:
+            entry_points:
+              - web/index.html
     
     If no `entry_points` option is supplied then any html file under `web` or
     `test` will be treated as an entry point.

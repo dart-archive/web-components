@@ -1,0 +1,11 @@
+name: html_imports
+dependencies:
+  browser: '^0.10.0'
+  initialize: any
+  web_components:
+    path: '../../'
+dev_dependencies:
+  unittest: '^0.11.0'
+transformers:
+- web_components:
+    entry_points: test/basic_test.html

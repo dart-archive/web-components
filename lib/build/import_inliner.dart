@@ -34,7 +34,7 @@ class ImportInlinerTransformer extends Transformer {
   }
 
   apply(Transform transform) {
-    var logger = new BuildLogger(transform);
+    var logger = new BuildLogger(transform, convertErrorsToWarnings: true);
     return new ImportInliner(transform, transform.primaryInput.id, logger)
         .run();
   }
@@ -58,7 +58,7 @@ class ImportInliner {
       var primaryDocument = imports[primaryInput].document;
 
       // Normalize urls in the entry point.
-      var changed = new _UrlNormalizer(transform, primaryInput, logger)
+      var changed = new _UrlNormalizer(primaryInput, primaryInput, logger)
           .visit(primaryDocument);
 
       // Inline things if needed, always have at least one (the entry point).
@@ -104,7 +104,7 @@ class ImportInliner {
           .querySelectorAll('script[type="$dartType"]')
           .forEach((script) => script.remove());
       // Normalize urls in attributes and inline css.
-      new _UrlNormalizer(transform, asset, logger).visit(document);
+      new _UrlNormalizer(primaryInput, asset, logger).visit(document);
       // Replace the import with its contents by appending the nodes
       // immediately before the import one at a time, and then removing the
       // import from the document.
@@ -157,7 +157,8 @@ void _moveHeadToWrapper(Document doc, Element wrapper) {
 // completely from polymer or exposing it publicly here and using that in
 // polymer.
 class _UrlNormalizer extends TreeVisitor {
-  final Transform transform;
+  /// [AssetId] for the main entry point.
+  final AssetId primaryInput;
 
   /// Asset where the original content (and original url) was found.
   final AssetId sourceId;
@@ -174,10 +175,9 @@ class _UrlNormalizer extends TreeVisitor {
 
   final BuildLogger logger;
 
-  _UrlNormalizer(transform, this.sourceId, this.logger)
-      : transform = transform,
-        topLevelPath = '../' *
-            (transform.primaryInput.id.path.split('/').length - 2);
+  _UrlNormalizer(AssetId primaryInput, this.sourceId, this.logger)
+      : primaryInput = primaryInput,
+        topLevelPath = '../' * (primaryInput.path.split('/').length - 2);
 
   bool visit(Node node) {
     super.visit(node);
@@ -215,7 +215,7 @@ class _UrlNormalizer extends TreeVisitor {
   // TODO(jmesserly): use csslib here instead? Parsing with RegEx is sadness.
   // Maybe it's reliable enough for finding URLs in CSS? I'm not sure.
   String visitCss(String cssText) {
-    var url = spanUrlFor(sourceId, transform.primaryInput.id, logger);
+    var url = spanUrlFor(sourceId, primaryInput, logger);
     var src = new SourceFile(cssText, url: url);
     return cssText.replaceAllMapped(_url, (match) {
       changed = true;
@@ -266,7 +266,7 @@ class _UrlNormalizer extends TreeVisitor {
 
     var id = uriToAssetId(sourceId, hrefToParse, logger, span);
     if (id == null) return href;
-    var primaryId = transform.primaryInput.id;
+    var primaryId = primaryInput;
 
     // Build the new path, placing back any suffixes that we stripped earlier.
     var prefix =

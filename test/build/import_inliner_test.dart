@@ -605,7 +605,7 @@ void importTests() {
         <link rel="import" href="foo.html">
         </head></html>''',
   }, {}, [
-    'error: ${inlineImportFail.create({
+    'warning: ${inlineImportFail.create({
           'error': 'Could not find asset a|web/foo.html.'
       }).snippet} '
         '(web/test.html 1 8)',

@@ -183,7 +183,7 @@ class ScriptCompactor {
         var id = uriToAssetId(from, uri, logger, span, errorOnAbsolute: false);
         if (id == null) continue;
 
-        var primaryId = transform.primaryInput.id;
+        var primaryId = primaryInput;
         var newUri = assetUrlFor(id, primaryId, logger);
         if (newUri != uri) {
           output.edit(span.start.offset, span.end.offset, "'$newUri'");

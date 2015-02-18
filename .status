@@ -5,11 +5,14 @@
 # Don't run any test-like files that show up in packages directories. It
 # shouldn't be necessary to run "pub install" in these packages, but if you do
 # it shouldn't break the tests.
-*/packages/*/*: Skip
-*/*/packages/*/*: Skip
-*/*/*/packages/*/*: Skip
-*/*/*/*/packages/*/*: Skip
-*/*/*/*/*/packages/*/*: Skip
+*/packages/*/*: SkipByDesign
+*/*/packages/*/*: SkipByDesign
+*/*/*/packages/*/*: SkipByDesign
+*/*/*/*/packages/*/*: SkipByDesign
+*/*/*/*/*/packages/*/*: SkipByDesign
+
+# Fails build step because of bad imports
+build/html_import_annotation_test: SkipByDesign # Invalid once built
 
 [ $compiler == none && ($runtime == dartium || $runtime == ContentShellOnAndroid) ]
 test/interop_test: Pass, RuntimeError # Issue 18931
@@ -18,8 +21,10 @@ test/interop_test: Pass, RuntimeError # Issue 18931
 build/test/interop_test: Fail # Issue 19329
 
 [ $runtime == vm || $runtime == d8 || $runtime == jsshell ]
-test/*: Skip # uses dart:html
-build/test/*: Skip # uses dart:html
+test/*: SkipByDesign # uses dart:html
+build/test/*: SkipByDesign # uses dart:html
+e2e_test/html_imports/test/*: SkipByDesign # uses dart:html
+build/e2e_test/html_imports/test/*: SkipByDesign # uses dart:html
 
 [ $compiler == dart2js ]
 test/*: Skip # use pub-build to run tests (they need the companion .html file)

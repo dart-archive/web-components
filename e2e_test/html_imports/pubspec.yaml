@@ -8,4 +8,5 @@ dev_dependencies:
   unittest: '^0.11.0'
 transformers:
 - web_components:
+    $include: '**/*_test.html'
     entry_points: test/basic_test.html

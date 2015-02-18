@@ -12,7 +12,7 @@
 */*/*/*/*/packages/*/*: SkipByDesign
 
 # Fails build step because of bad imports
-build/html_import_annotation_test: SkipByDesign # Invalid once built
+build/test/html_import_annotation_test: SkipByDesign # Invalid once built
 
 [ $compiler == none && ($runtime == dartium || $runtime == ContentShellOnAndroid) ]
 test/interop_test: Pass, RuntimeError # Issue 18931
@@ -27,8 +27,8 @@ e2e_test/html_imports/test/*: SkipByDesign # uses dart:html
 build/e2e_test/html_imports/test/*: SkipByDesign # uses dart:html
 
 [ $compiler == dart2js ]
-test/*: Skip # use pub-build to run tests (they need the companion .html file)
+test/*: SkipByDesign # use pub-build to run tests (they need the companion .html file)
 
 [ $browser ]
-test/build/*: Skip # vm only tests
-build/test/build/*: Skip # vm only tests
+test/build/*: SkipByDesign # vm only tests
+build/test/build/*: SkipByDesign # vm only tests

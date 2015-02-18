@@ -1,3 +1,7 @@
+#### 0.10.2+1
+  * Minor cleanup to changelog and tests.
+  * ImportInliner now throws warnings instead of errors.
+
 #### 0.10.2
   * Added the `HtmlImport` annotation. This can be added to any library
     declaration and it will inject an html import to the specified path into the

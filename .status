@@ -11,10 +11,15 @@
 */*/*/*/packages/*/*: SkipByDesign
 */*/*/*/*/packages/*/*: SkipByDesign
 
-build/test/html_import_annotation_test: SkipByDesign # Invalid once built
+# We need a hook in package-bots to invoke pub-build in nested folders before we
+# can run these tests:
+e2e_test/*: Skip
+build/e2e_test/*: Skip
+
+# Invalid once built, tests pre-build behavior.
+build/test/html_import_annotation_test: SkipByDesign
 
 [ $compiler == none && ($runtime == dartium || $runtime == ContentShellOnAndroid) ]
-e2e_test/html_imports/test/basic_test: RuntimeError # Github Issue 7
 test/interop_test: Pass, RuntimeError # Issue 18931
 
 [ $compiler == dart2js && $csp && $runtime == drt ]

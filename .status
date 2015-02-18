@@ -11,10 +11,10 @@
 */*/*/*/packages/*/*: SkipByDesign
 */*/*/*/*/packages/*/*: SkipByDesign
 
-# Fails build step because of bad imports
 build/test/html_import_annotation_test: SkipByDesign # Invalid once built
 
 [ $compiler == none && ($runtime == dartium || $runtime == ContentShellOnAndroid) ]
+e2e_test/html_imports/test/basic_test: RuntimeError # Github Issue 7
 test/interop_test: Pass, RuntimeError # Issue 18931
 
 [ $compiler == dart2js && $csp && $runtime == drt ]

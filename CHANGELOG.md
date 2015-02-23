@@ -1,3 +1,11 @@
+#### 0.10.3
+  * Added `generateWebComponentsBootstrap` method to the main `web_components`
+    transformer file which accepts a `Transform` and a `Resolver`. You can use
+    this function from any transformer and share the resolver you already have.
+  * Fixed up the bootstrap call in `ScriptCompactor` to not use `=>` syntax
+    since it has a declared return type of `void`. This could previously cause
+    a checked mode error if the original program returned something from `main`.
+
 #### 0.10.2+1
   * Minor cleanup to changelog and tests.
   * ImportInliner now throws warnings instead of errors.

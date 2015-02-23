@@ -12,9 +12,34 @@ import 'package:code_transformers/messages/build_logger.dart';
 import 'package:code_transformers/resolver.dart';
 import 'package:html5lib/dom.dart' as dom;
 import 'package:initialize/transformer.dart' show generateBootstrapFile;
+import 'package:initialize/build/initializer_plugin.dart';
 import 'package:path/path.dart' as path;
 import 'package:web_components/transformer.dart';
 import 'common.dart';
+
+/// Public method that can be used inside any [Transformer] which already has a
+/// [Resolver] and [Transform] to generate a bootstrap file for the
+/// web_components package.
+Asset generateWebComponentsBootstrap(Resolver resolver, Transform transform,
+    dom.Document document, AssetId scriptId, AssetId newScriptId,
+    {List<InitializerPlugin> extraPlugins: const []}) {
+  var htmlImportRecorder = new HtmlImportAnnotationRecorder();
+  var plugins = [htmlImportRecorder]..addAll(extraPlugins);
+
+  // Bootstrap the application using the `initialize` package and our
+  // plugins.
+  var initializeBootstrap = generateBootstrapFile(
+      resolver, transform, scriptId, newScriptId,
+      errorIfNotFound: false, plugins: plugins);
+
+  // Add all seen imports to the document.
+  for (var importPath in htmlImportRecorder.importPaths) {
+    document.head.append(new dom.Element.tag('link')
+      ..attributes = {'rel': 'import', 'href': importPath,});
+  }
+
+  return initializeBootstrap;
+}
 
 /// A [Transformer] which runs the `initialize` transformer with
 /// some special plugins and also inlines the html imports.
@@ -91,27 +116,17 @@ class WebComponentsTransformer extends Transformer {
         var newScriptId = new AssetId(scriptId.package,
             '${path.url.withoutExtension(scriptId.path)}.initialize.dart');
 
-        // Bootstrap the application using the `initialize` package and the
-        // html import annotation recorder plugin.
-        var htmlImportRecorder = new HtmlImportAnnotationRecorder();
-        var initializeBootstrap = generateBootstrapFile(
-            resolver, transform, scriptId, newScriptId,
-            errorIfNotFound: false, plugins: [htmlImportRecorder]);
-        transform.addOutput(initializeBootstrap);
-
-        // Add all seen imports to the document.
-        for (var importPath in htmlImportRecorder.importPaths) {
-          doc.head.append(new dom.Element.tag('link')
-            ..attributes = {'rel': 'import', 'href': importPath,});
-        }
+        var bootstrap = generateWebComponentsBootstrap(
+            resolver, transform, doc, scriptId, newScriptId);
 
         // Swap out the main script tag for the bootstrap version.
-        mainScriptTag.attributes['src'] = path.url.relative(
-            initializeBootstrap.id.path,
+        mainScriptTag.attributes['src'] = path.url.relative(bootstrap.id.path,
             from: path.url.dirname(primaryInput.id.path));
 
+        // Output the new document and bootstrap file.
         transform
             .addOutput(new Asset.fromString(primaryInput.id, doc.outerHtml));
+        transform.addOutput(bootstrap);
       });
     });
   }

@@ -1,3 +1,12 @@
+#### 0.10.4
+  * Added `CustomElement` annotation. This can be added to any class to register
+    it with a tag in the main document.
+  * Added a `web_components.dart` file which exports all the annotations
+    provided by this package. Note that in later breaking releases
+    `html_import_annotation.dart` and `custom_element_proxy.dart` will likely
+    move into the `src` folder, so switching to the `web_components.dart` import
+    is recommended.
+
 #### 0.10.3
   * Added `generateWebComponentsBootstrap` method to the main `web_components`
     transformer file which accepts a `Transform` and a `Resolver`. You can use

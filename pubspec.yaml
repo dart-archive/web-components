@@ -1,5 +1,5 @@
 name: web_components
-version: 0.10.3
+version: 0.10.4
 author: Polymer.dart Authors <web-ui-dev@dartlang.org>
 homepage: https://www.dartlang.org/polymer-dart/
 description: >
@@ -23,6 +23,7 @@ transformers:
 - web_components:
     $include: '**/*_test.html'
     entry_points:
+      - test/custom_element_test.html
       - test/custom_element_proxy_test.html
       - test/html_import_annotation_test.html
 

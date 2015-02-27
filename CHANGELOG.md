@@ -1,3 +1,7 @@
+#### 0.10.4+1
+  * Update `initialize` lower bound to get bug fixes.
+  * Make sure to always use `path.url` in transformers.
+
 #### 0.10.4
   * Added `CustomElement` annotation. This can be added to any class to register
     it with a tag in the main document.

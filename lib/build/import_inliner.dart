@@ -177,7 +177,7 @@ class _UrlNormalizer extends TreeVisitor {
 
   _UrlNormalizer(AssetId primaryInput, this.sourceId, this.logger)
       : primaryInput = primaryInput,
-        topLevelPath = '../' * (primaryInput.path.split('/').length - 2);
+        topLevelPath = '../' * (path.url.split(primaryInput.path).length - 2);
 
   bool visit(Node node) {
     super.visit(node);
@@ -291,7 +291,7 @@ class _UrlNormalizer extends TreeVisitor {
     }
 
     var builder = path.url;
-    return path.normalize(builder.relative(builder.join('/', newPath),
+    return builder.normalize(builder.relative(builder.join('/', newPath),
         from: builder.join('/', builder.dirname(primaryId.path))));
   }
 }

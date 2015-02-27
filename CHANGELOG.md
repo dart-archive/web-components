@@ -1,3 +1,6 @@
+#### 0.10.4+2
+  * Fix `@CustomElement` test in internet explorer.
+
 #### 0.10.4+1
   * Update `initialize` lower bound to get bug fixes.
   * Make sure to always use `path.url` in transformers.

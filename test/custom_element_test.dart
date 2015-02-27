@@ -37,6 +37,10 @@ main() {
   init.run().then((_) {
     var container = querySelector('#container') as DivElement;
 
+    setUp(() {
+      return new Future(() {});
+    });
+
     tearDown(() {
       container.children.clear();
     });

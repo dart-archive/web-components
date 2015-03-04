@@ -30,7 +30,12 @@ class ImportCrawler {
   final BuildLogger _logger;
   final AssetId _primaryInputId;
 
-  ImportCrawler(this._transform, this._primaryInputId, this._logger);
+  // Optional parsed document for the primary id if available.
+  final Document _primaryDocument;
+
+  ImportCrawler(this._transform, this._primaryInputId, this._logger,
+      {Document primaryDocument})
+      : _primaryDocument = primaryDocument;
 
   /// Returns a post-ordered map of [AssetId]'s to [ImportData]. The [AssetId]'s
   /// represent an asset which was discovered via an html import, and the
@@ -40,13 +45,11 @@ class ImportCrawler {
     var documents = new LinkedHashMap<AssetId, ImportData>();
     var seen = new Set<AssetId>();
 
-    Future doCrawl(AssetId assetId, [Element import]) {
+    Future doCrawl(AssetId assetId, [Element import, Document document]) {
       if (seen.contains(assetId)) return null;
       seen.add(assetId);
 
-      return _transform.readInputAsString(assetId).then((html) {
-        var document = parseHtml(html, assetId.path);
-
+      Future crawlImports(Document document) {
         var imports = document.querySelectorAll('link[rel="import"]');
         var done =
             Future.forEach(imports, (i) => doCrawl(_importId(assetId, i), i));
@@ -55,14 +58,23 @@ class ImportCrawler {
         return done.then((_) {
           documents[assetId] = new ImportData(document, import);
         });
-      }).catchError((error) {
-        var span;
-        if (import != null) span = import.sourceSpan;
-        _logger.error(inlineImportFail.create({'error': error}), span: span);
-      });
+      }
+
+      if (document != null) {
+        return crawlImports(document);
+      } else {
+        return _transform.readInputAsString(assetId).then((html) {
+          return crawlImports(parseHtml(html, assetId.path));
+        }).catchError((error) {
+          var span;
+          if (import != null) span = import.sourceSpan;
+          _logger.error(inlineImportFail.create({'error': error}), span: span);
+        });
+      }
     }
 
-    return doCrawl(_primaryInputId).then((_) => documents);
+    return
+      doCrawl(_primaryInputId, null, _primaryDocument).then((_) => documents);
   }
 
   AssetId _importId(AssetId source, Element import) {

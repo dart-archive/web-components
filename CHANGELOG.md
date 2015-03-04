@@ -1,3 +1,8 @@
+#### 0.10.5
+  * Update `ImportCrawler` with support for pre-parsed initial documents. This
+    allows it to work better with other transformers in the same step (you can
+    pass in a modified document).
+
 #### 0.10.4+2
   * Fix `@CustomElement` test in internet explorer.
 

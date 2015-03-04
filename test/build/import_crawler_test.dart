@@ -3,24 +3,42 @@
 // BSD-style license that can be found in the LICENSE file.
 library web_components.test.build.import_crawler_test;
 
+import 'dart:async';
 import 'package:barback/barback.dart';
 import 'package:code_transformers/tests.dart';
 import 'package:code_transformers/messages/build_logger.dart';
+import 'package:html5lib/dom.dart' show Document;
+import 'package:web_components/build/common.dart';
 import 'package:web_components/build/import_crawler.dart';
 import 'package:unittest/compact_vm_config.dart';
 
 class _TestTransformer extends Transformer {
   final String _entryPoint;
   Map<AssetId, ImportData> documents;
+  final bool _preParseDocument;
 
-  _TestTransformer(this._entryPoint);
+  _TestTransformer(this._entryPoint, [this._preParseDocument = false]);
 
   isPrimary(AssetId id) => id.path == _entryPoint;
 
   apply(Transform transform) {
     var primaryInput = transform.primaryInput;
     var logger = new BuildLogger(transform, primaryId: primaryInput.id);
-    var crawler = new ImportCrawler(transform, primaryInput.id, logger);
+    if (_preParseDocument) {
+      return primaryInput.readAsString().then((html) {
+        var document = parseHtml(html, primaryInput.id.path);
+        return crawlDocument(transform, logger, document);
+      });
+    } else {
+      return crawlDocument(transform, logger);
+    }
+  }
+
+  Future crawlDocument(
+      Transform transform, BuildLogger logger, [Document document]) {
+    var primaryInput = transform.primaryInput;
+    var crawler = new ImportCrawler(
+        transform, primaryInput.id, logger, primaryDocument: document);
     return crawler.crawlImports().then((docs) {
       documents = docs;
       transform.addOutput(new Asset.fromString(
@@ -31,8 +49,13 @@ class _TestTransformer extends Transformer {
 
 main() {
   useCompactVMConfiguration();
+  runTests([[new _TestTransformer('web/index.html')]]);
+  // Test with a preparsed original document as well.
+  runTests([[new _TestTransformer('web/index.html', true)]]);
+}
 
-  testPhases('basic', [[new _TestTransformer('web/index.html')]], {
+runTests(List<List<Transformer>> phases) {
+  testPhases('basic', phases, {
     'a|web/index.html': '''
       <link rel="import" href="foo.html">
       <link rel="import" href="packages/a/foo.html">
@@ -53,7 +76,7 @@ main() {
       ''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('cycle', [[new _TestTransformer('web/index.html')]], {
+  testPhases('cycle', phases, {
     'a|web/index.html': '''
       <link rel="import" href="packages/a/foo.html">
       <div>a|web/index.html</div>
@@ -70,7 +93,7 @@ main() {
       ''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('deep imports', [[new _TestTransformer('web/index.html')]], {
+  testPhases('deep imports', phases, {
     'a|web/index.html': '''
       <link rel="import" href="packages/a/foo.html">
       <div>a|web/index.html</div>

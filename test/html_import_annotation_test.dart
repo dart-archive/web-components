@@ -11,6 +11,7 @@ import 'package:initialize/initialize.dart' as init;
 import 'package:unittest/html_config.dart';
 import 'package:unittest/unittest.dart';
 import 'package:web_components/html_import_annotation.dart';
+import 'foo/bar.dart';
 
 const String importPath = 'my_import.html';
 
@@ -19,8 +20,14 @@ main() {
 
   test('adds import to head', () {
     return init.run().then((_) {
-      var good = document.head.querySelector('link[href="$importPath"]');
-      expect(good.import.body.text, 'Hello world!\n');
+      var my_import = document.head.querySelector('link[href="$importPath"]');
+      expect(my_import, isNotNull);
+      expect(my_import.import.body.text, 'Hello world!\n');
+
+      var bar = document.head.querySelector('link[href="foo/bar.html"]');
+      expect(bar, isNotNull);
+      expect(bar.import.body.text, 'bar\n');
+
       var bad = document.head.querySelector('link[href="bad_import.html"]');
       expect(bad.import, isNull);
     });

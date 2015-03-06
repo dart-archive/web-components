@@ -1,3 +1,6 @@
+#### 0.10.5+1
+  * Fix @HtmlImport with relative paths from within folders in deployment mode.
+
 #### 0.10.5
   * Update `ImportCrawler` with support for pre-parsed initial documents. This
     allows it to work better with other transformers in the same step (you can

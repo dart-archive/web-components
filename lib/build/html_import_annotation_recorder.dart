@@ -79,7 +79,7 @@ class HtmlImportAnnotationRecorder implements InitializerPlugin {
           path.url.joinAll(segments.getRange(1, segments.length)),
           from: path.url.dirname(path.url.join(bootstrapId.path)));
     } else if (segments[1] == 'lib') {
-      libPath = path.url.joinAll(segments.getRange(1, segments.length));
+      libPath = path.url.joinAll(segments.getRange(2, segments.length));
     } else {
       logger.error('Unable to import `${element.source.uri.path}` from '
           '${bootstrapId}.');

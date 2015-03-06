@@ -13,16 +13,13 @@ String normalizeHtmlImportPath(
   }
 
   var dartFileDir = path.url.dirname(dartFilePath);
-  var segments = path.url.split(dartFileDir);
-  // The dartFileDir without the leading dir (web, lib, test, etc).
-  var dartFileSubDir = path.url.joinAll(segments.getRange(1, segments.length));
 
   // Relative paths have no package supplied.
   if (dartFilePackage == null) {
-    return path.url.normalize(path.url.join(dartFileSubDir, filePath));
+    return path.url.normalize(path.url.join(dartFileDir, filePath));
   }
 
   // Only option left is a packages/ path.
   return path.url.normalize(
-      path.url.join('packages/', dartFilePackage, dartFileSubDir, filePath));
+      path.url.join('packages/', dartFilePackage, dartFileDir, filePath));
 }

@@ -118,4 +118,53 @@ main() {
         bar() {}
         ''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('imports go above the dart script', phases, {
+    'b|web/index.html': '''
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <script type="application/dart" src="index.dart"></script>
+          </head>
+          <body>
+          </body>
+        </html>
+        ''',
+    'b|web/index.dart': '''
+        @HtmlImport('package:b/b.html')
+        library b;
+
+        import 'package:web_components/html_import_annotation.dart';
+        import 'package:c/c.dart';
+        ''',
+    'b|lib/b.html': '''
+        <div>b</div>
+        ''',
+    'c|lib/c.dart': '''
+        @HtmlImport('c.html')
+        library c;
+
+        import 'package:web_components/html_import_annotation.dart';
+        ''',
+    'c|lib/c.html': '''
+        <div>c</div>
+        ''',
+    'initialize|lib/initialize.dart': mockInitialize,
+    'web_components|lib/html_import_annotation.dart': mockHtmlImportAnnotation,
+  }, {
+    'b|web/index.html': '''
+        <!DOCTYPE html>
+        <html>
+          <head></head>
+          <body>
+            <div hidden="">
+              <div>c</div>
+              <div>b</div>
+              <script type="application/dart" src="index.bootstrap.initialize.dart">
+              </script>
+            </div>
+          </body>
+        </html>
+        ''',
+  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 }

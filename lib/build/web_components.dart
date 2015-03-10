@@ -32,10 +32,14 @@ Asset generateWebComponentsBootstrap(Resolver resolver, Transform transform,
       resolver, transform, scriptId, newScriptId,
       errorIfNotFound: false, plugins: plugins);
 
-  // Add all seen imports to the document.
+  // Add all seen imports to the document, before the first dart script tag if
+  // it exists.
+  var dartScript =
+      document.head.querySelector('script[type="application/dart"]');
   for (var importPath in htmlImportRecorder.importPaths) {
-    document.head.append(new dom.Element.tag('link')
-      ..attributes = {'rel': 'import', 'href': importPath,});
+    var import = new dom.Element.tag('link')
+      ..attributes = {'rel': 'import', 'href': importPath,};
+    document.head.insertBefore(import, dartScript);
   }
 
   return initializeBootstrap;

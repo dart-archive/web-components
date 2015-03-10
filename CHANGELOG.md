@@ -1,3 +1,7 @@
+#### 0.10.5+2
+  * Append html imports in front of the dart script tag, if one exists in
+    `document.head`.
+
 #### 0.10.5+1
   * Fix @HtmlImport with relative paths from within folders in deployment mode.
 

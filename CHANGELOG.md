@@ -1,6 +1,8 @@
 #### 0.10.5+3
   * Fix normalization of relative paths inside of deep relative imports,
     https://github.com/dart-lang/polymer-dart/issues/30.
+  * Update analyzer and code_transformers versions and use new mock sdk from
+    code_transformers.
 
 #### 0.10.5+2
   * Append html imports in front of the dart script tag, if one exists in

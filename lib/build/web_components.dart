@@ -10,6 +10,7 @@ import 'package:barback/barback.dart';
 import 'package:code_transformers/assets.dart';
 import 'package:code_transformers/messages/build_logger.dart';
 import 'package:code_transformers/resolver.dart';
+import 'package:code_transformers/src/dart_sdk.dart' as dart_sdk;
 import 'package:html5lib/dom.dart' as dom;
 import 'package:initialize/transformer.dart' show generateBootstrapFile;
 import 'package:initialize/build/initializer_plugin.dart';
@@ -51,49 +52,8 @@ class WebComponentsTransformer extends Transformer {
   final Resolvers _resolvers;
   TransformOptions options;
 
-  WebComponentsTransformer(this.options) : _resolvers = new Resolvers.fromMock({
-        // The list of types below is derived from:
-        //   * types that are used internally by the resolver (see
-        //   _initializeFrom in resolver.dart).
-        // TODO(jakemac): Move this into code_transformers so it can be shared.
-        'dart:core': '''
-          library dart.core;
-          class Object {}
-          class Function {}
-          class StackTrace {}
-          class Symbol {}
-          class Type {}
-
-          class String extends Object {}
-          class bool extends Object {}
-          class num extends Object {}
-          class int extends num {}
-          class double extends num {}
-          class DateTime extends Object {}
-          class Null extends Object {}
-
-          class Deprecated extends Object {
-            final String expires;
-            const Deprecated(this.expires);
-          }
-          const Object deprecated = const Deprecated("next release");
-          class _Override { const _Override(); }
-          const Object override = const _Override();
-          class _Proxy { const _Proxy(); }
-          const Object proxy = const _Proxy();
-
-          class List<V> extends Object {}
-          class Map<K, V> extends Object {}
-          ''',
-        'dart:html': '''
-          library dart.html;
-          class HtmlElement {}
-          ''',
-        'dart:async': '''
-          library dart.async;
-          class Future<T> {}
-        ''',
-      });
+  WebComponentsTransformer(this.options)
+      : _resolvers = new Resolvers.fromMock(dart_sdk.mockSdkSources);
 
   bool isPrimary(AssetId id) {
     if (options.entryPoints != null) {

@@ -34,6 +34,10 @@ class HtmlImportAnnotationRecorder implements InitializerPlugin {
       type = annotationElement.returnType;
     } else if (annotationElement is PropertyAccessorElement) {
       type = annotationElement.variable.propagatedType;
+      if (type == null) {
+        type = pluginData.resolver.evaluateConstant(annotationElement.library,
+            pluginData.initializer.annotationNode.name).value.type;
+      }
     } else {
       logger.error('Unsupported annotation type. Only constructors and '
           'properties are supported as initializers.');

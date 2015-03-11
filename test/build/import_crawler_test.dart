@@ -34,11 +34,11 @@ class _TestTransformer extends Transformer {
     }
   }
 
-  Future crawlDocument(
-      Transform transform, BuildLogger logger, [Document document]) {
+  Future crawlDocument(Transform transform, BuildLogger logger,
+      [Document document]) {
     var primaryInput = transform.primaryInput;
-    var crawler = new ImportCrawler(
-        transform, primaryInput.id, logger, primaryDocument: document);
+    var crawler = new ImportCrawler(transform, primaryInput.id, logger,
+        primaryDocument: document);
     return crawler.crawlImports().then((docs) {
       documents = docs;
       transform.addOutput(new Asset.fromString(

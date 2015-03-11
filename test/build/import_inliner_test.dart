@@ -735,6 +735,28 @@ void urlAttributeTests() {
         <img src="{{bar[0]}}/{{baz[1]}}.{{extension}}">
         </body></html>''',
   }, null, StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('relative paths in deep imports', phases, {
+    'a|web/test.html': '''
+        <!DOCTYPE html><html><head>
+        <link rel="import" href="foo/foo.html">
+        </head></html>''',
+    'a|web/foo/foo.html': '''
+        <link rel="import" href="bar.html">''',
+    'a|web/foo/bar.html': '''
+        <style rel="stylesheet" href="baz.css"></style>
+        <style rel="stylesheet" href="../css/zap.css"></style>''',
+    'a|web/foo/baz.css': '',
+    'a|web/css/zap.css': '',
+  }, {
+    'a|web/test.html': '''
+        <!DOCTYPE html><html><head></head><body>
+        <div hidden="">
+          <style rel="stylesheet" href="foo/baz.css"></style>
+          <style rel="stylesheet" href="css/zap.css"></style>
+        </div>
+        </body></html>''',
+  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void entryPointTests() {

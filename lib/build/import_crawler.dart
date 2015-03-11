@@ -14,13 +14,16 @@ import 'messages.dart';
 
 /// Information about an html import found in a document.
 class ImportData {
+  /// The [AssetId] where the html import appeared.
+  final AssetId fromId;
+
   /// The [Document] where the html import appeared.
   final Document document;
 
   /// The html import element itself.
   final Element element;
 
-  ImportData(this.document, this.element);
+  ImportData(this.document, this.element, {this.fromId});
 }
 
 /// A crawler for html imports.
@@ -45,18 +48,19 @@ class ImportCrawler {
     var documents = new LinkedHashMap<AssetId, ImportData>();
     var seen = new Set<AssetId>();
 
-    Future doCrawl(AssetId assetId, [Element import, Document document]) {
+    Future doCrawl(AssetId assetId,
+        {Element import, Document document, AssetId from}) {
       if (seen.contains(assetId)) return null;
       seen.add(assetId);
 
       Future crawlImports(Document document) {
         var imports = document.querySelectorAll('link[rel="import"]');
-        var done =
-            Future.forEach(imports, (i) => doCrawl(_importId(assetId, i), i));
+        var done = Future.forEach(imports,
+            (i) => doCrawl(_importId(assetId, i), import: i, from: assetId));
 
         // Add this document after its dependencies.
         return done.then((_) {
-          documents[assetId] = new ImportData(document, import);
+          documents[assetId] = new ImportData(document, import, fromId: from);
         });
       }
 
@@ -73,8 +77,8 @@ class ImportCrawler {
       }
     }
 
-    return
-      doCrawl(_primaryInputId, null, _primaryDocument).then((_) => documents);
+    return doCrawl(_primaryInputId, document: _primaryDocument)
+        .then((_) => documents);
   }
 
   AssetId _importId(AssetId source, Element import) {

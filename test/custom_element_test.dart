@@ -75,7 +75,6 @@ main() {
       });
     });
 
-
     test('extends input element', () {
       expect(document.querySelector('input') is ExtendedElement, isTrue);
       container.append(new ExtendedElement());

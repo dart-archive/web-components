@@ -104,7 +104,7 @@ class ImportInliner {
           .querySelectorAll('script[type="$dartType"]')
           .forEach((script) => script.remove());
       // Normalize urls in attributes and inline css.
-      new _UrlNormalizer(primaryInput, asset, logger).visit(document);
+      new _UrlNormalizer(data.fromId, asset, logger).visit(document);
       // Replace the import with its contents by appending the nodes
       // immediately before the import one at a time, and then removing the
       // import from the document.
@@ -266,7 +266,6 @@ class _UrlNormalizer extends TreeVisitor {
 
     var id = uriToAssetId(sourceId, hrefToParse, logger, span);
     if (id == null) return href;
-    var primaryId = primaryInput;
 
     // Build the new path, placing back any suffixes that we stripped earlier.
     var prefix =
@@ -282,17 +281,17 @@ class _UrlNormalizer extends TreeVisitor {
       return '${topLevelPath}assets/${id.package}/${newPath.substring(6)}';
     }
 
-    if (primaryId.package != id.package) {
+    if (primaryInput.package != id.package) {
       // Technically we shouldn't get there
       logger.error(internalErrorDontKnowHowToImport
-              .create({'target': id, 'source': primaryId, 'extra': ''}),
+              .create({'target': id, 'source': primaryInput, 'extra': ''}),
           span: span);
       return href;
     }
 
     var builder = path.url;
     return builder.normalize(builder.relative(builder.join('/', newPath),
-        from: builder.join('/', builder.dirname(primaryId.path))));
+        from: builder.join('/', builder.dirname(primaryInput.path))));
   }
 }
 

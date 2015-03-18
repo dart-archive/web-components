@@ -9,7 +9,7 @@ import 'package:web_components/build/messages.dart';
 import 'package:unittest/compact_vm_config.dart';
 import 'package:unittest/unittest.dart';
 
-var transformer = new ImportInlinerTransformer();
+var transformer = new ImportInlinerTransformer(null, ['{{', '[[']);
 var phases = [[transformer]];
 
 main() {
@@ -706,6 +706,24 @@ void urlAttributeTests() {
         <div hidden="">
         <img _src="foo/{{bar}}">
         <a _href="foo/{{bar}}">test</a>
+        </div>
+        </body></html>''',
+  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('paths starting with a binding are treated as absolute', phases, {
+    'a|web/test.html': '''
+        <!DOCTYPE html><html><head>
+        <link rel="import" href="packages/a/foo.html">
+        </head></html>''',
+    'a|lib/foo.html': '''
+        <img _src="{{bar}}">
+        <img _src="[[bar]]">''',
+  }, {
+    'a|web/test.html': '''
+        <!DOCTYPE html><html><head></head><body>
+        <div hidden="">
+          <img _src="{{bar}}">
+          <img _src="[[bar]]">
         </div>
         </body></html>''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);

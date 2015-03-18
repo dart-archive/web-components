@@ -22,8 +22,10 @@ import 'messages.dart';
 /// in html imports.
 class ImportInlinerTransformer extends Transformer {
   final List<String> entryPoints;
+  final List<String> bindingStartDelimiters;
 
-  ImportInlinerTransformer([this.entryPoints]);
+  ImportInlinerTransformer(
+      [this.entryPoints, this.bindingStartDelimiters = const []]);
 
   bool isPrimary(AssetId id) {
     if (entryPoints != null) return entryPoints.contains(id.path);
@@ -35,8 +37,8 @@ class ImportInlinerTransformer extends Transformer {
 
   apply(Transform transform) {
     var logger = new BuildLogger(transform, convertErrorsToWarnings: true);
-    return new ImportInliner(transform, transform.primaryInput.id, logger)
-        .run();
+    return new ImportInliner(transform, transform.primaryInput.id, logger,
+        bindingStartDelimiters: bindingStartDelimiters).run();
   }
 }
 
@@ -49,8 +51,11 @@ class ImportInliner {
   final AssetId primaryInput;
   // The logger to use.
   final BuildLogger logger;
+  // The start delimiters for template bindings, such as '{{' or '[['.
+  final List<String> bindingStartDelimiters;
 
-  ImportInliner(this.transform, this.primaryInput, this.logger);
+  ImportInliner(this.transform, this.primaryInput, this.logger,
+      {this.bindingStartDelimiters: const []});
 
   Future run() {
     var crawler = new ImportCrawler(transform, primaryInput, logger);
@@ -58,7 +63,8 @@ class ImportInliner {
       var primaryDocument = imports[primaryInput].document;
 
       // Normalize urls in the entry point.
-      var changed = new _UrlNormalizer(primaryInput, primaryInput, logger)
+      var changed = new _UrlNormalizer(
+              primaryInput, primaryInput, logger, bindingStartDelimiters)
           .visit(primaryDocument);
 
       // Inline things if needed, always have at least one (the entry point).
@@ -104,7 +110,8 @@ class ImportInliner {
           .querySelectorAll('script[type="$dartType"]')
           .forEach((script) => script.remove());
       // Normalize urls in attributes and inline css.
-      new _UrlNormalizer(data.fromId, asset, logger).visit(document);
+      new _UrlNormalizer(data.fromId, asset, logger, bindingStartDelimiters)
+          .visit(document);
       // Replace the import with its contents by appending the nodes
       // immediately before the import one at a time, and then removing the
       // import from the document.
@@ -173,9 +180,15 @@ class _UrlNormalizer extends TreeVisitor {
   /// Whether or not the normalizer has changed something in the tree.
   bool changed = false;
 
+  // The start delimiters for template bindings, such as '{{' or '[['. If these
+  // are found before the first `/` in a url, then the url will not be
+  // normalized.
+  final List<String> bindingStartDelimiters;
+
   final BuildLogger logger;
 
-  _UrlNormalizer(AssetId primaryInput, this.sourceId, this.logger)
+  _UrlNormalizer(AssetId primaryInput, this.sourceId, this.logger,
+      this.bindingStartDelimiters)
       : primaryInput = primaryInput,
         topLevelPath = '../' * (path.url.split(primaryInput.path).length - 2);
 
@@ -248,6 +261,10 @@ class _UrlNormalizer extends TreeVisitor {
 
       hrefToParse = '${href.substring(0, firstFolder + 1)}';
     }
+
+    // If we found a binding before the first `/`, then just return the original
+    // href, we can't determine anything about it.
+    if (bindingStartDelimiters.any((d) => hrefToParse.contains(d))) return href;
 
     Uri uri;
     // Various template systems introduce invalid characters to uris which would

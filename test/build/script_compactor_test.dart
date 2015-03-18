@@ -120,7 +120,7 @@ void basicTests() {
             <link rel="import" href="packages/a/foo.html">
           </head>
           <body>
-            <script type="application/dart" src="index.html.1.bootstrap.dart"></script>
+            <script type="application/dart" src="index.bootstrap.dart"></script>
           </body>
         </html>''',
     'a|web/index.html.1.dart': '''
@@ -130,8 +130,8 @@ void basicTests() {
         library a.foo;
 
         import 'package:a/bar.dart';''',
-    'a|web/index.html.1.bootstrap.dart': '''
-        library a.web.index_html_1_bootstrap_dart;
+    'a|web/index.bootstrap.dart': '''
+        library a.web.index_bootstrap_dart;
 
         import 'index.html.0.dart' as i0;
         import 'index.html.1.dart' as i1;
@@ -190,14 +190,14 @@ void codeExtractorTests() {
   }, {
     'a|web/test.html': '''
         <!DOCTYPE html><html><head>
-          <script type="application/dart" src="test.html.0.bootstrap.dart">
+          <script type="application/dart" src="test.bootstrap.dart">
           </script>
         </head><body></body></html>''',
     'a|web/test.html.0.dart': '''
         library a.web.test_html_0;
         main() { }''',
-    'a|web/test.html.0.bootstrap.dart': '''
-        library a.web.test_html_0_bootstrap_dart;
+    'a|web/test.bootstrap.dart': '''
+        library a.web.test_bootstrap_dart;
 
         import 'test.html.0.dart' as i0;
 
@@ -214,14 +214,14 @@ void codeExtractorTests() {
   }, {
     'a|web/test.html': '''
         <!DOCTYPE html><html><head>
-          <script type="application/dart" src="test.html.0.bootstrap.dart">
+          <script type="application/dart" src="test.bootstrap.dart">
           </script>
         </head><body></body></html>''',
     'a|web/test.html.0.dart': '''
         library f;
         main() { }''',
-    'a|web/test.html.0.bootstrap.dart': '''
-        library a.web.test_html_0_bootstrap_dart;
+    'a|web/test.bootstrap.dart': '''
+        library a.web.test_bootstrap_dart;
 
         import 'test.html.0.dart' as i0;
 
@@ -336,7 +336,7 @@ dartUriTests() {
         part 'test2/baz.dart';''',
     'a|web/test2/foo.html': '''
         <!DOCTYPE html><html><head></head><body>
-          <script type="application/dart" src="foo.html.0.bootstrap.dart">
+          <script type="application/dart" src="foo.bootstrap.dart">
           </script>
         </body></html>''',
     'a|web/test2/foo.html.0.dart': '''

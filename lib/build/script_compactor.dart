@@ -104,8 +104,8 @@ class ScriptCompactor {
   /// Builds the bootstrap file and returns the path to it relative to
   /// [primaryInput].
   Asset _buildBootstrapFile(AssetId mainScript, Set<AssetId> importScripts) {
-    var bootstrapId = new AssetId(mainScript.package,
-        mainScript.path.replaceFirst('.dart', '.bootstrap.dart'));
+    var bootstrapId = new AssetId(primaryInput.package,
+        primaryInput.path.replaceFirst('.html', '.bootstrap.dart'));
 
     var buffer = new StringBuffer();
     buffer.writeln('library ${_libraryNameFor(bootstrapId)};');

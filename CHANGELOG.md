@@ -1,8 +1,11 @@
-#### 0.10.6
+#### 0.11.0
   * Add `bindingStartDelimiters` option to the `ImportInlinerTransformer`. Any
     urls which contain any of the supplied delimiters before the first `/` will
     be left alone since they can't be reasoned about. If you want these urls to
     be treated as relative to the current path you should add a `./` in front.
+  * The `ScriptCompactorTransformer` now names its bootstrap file based on the
+    entry point html file, instead of the original dart file. This is ensure it
+    is the original package.
 
 #### 0.10.5+3
   * Fix normalization of relative paths inside of deep relative imports,

@@ -6,10 +6,9 @@ library custom_element_proxy_test;
 import 'dart:async';
 import 'dart:html';
 import 'dart:js';
-import 'package:initialize/initialize.dart' as init;
 import 'package:unittest/html_config.dart';
 import 'package:unittest/unittest.dart';
-import 'package:web_components/custom_element_proxy.dart';
+import 'package:web_components/web_components.dart';
 
 @CustomElementProxy('basic-element')
 class BasicElement extends HtmlElement {
@@ -34,7 +33,7 @@ class ExtendedElement extends InputElement {
 
 main() {
   useHtmlConfiguration();
-  init.run().then((_) {
+  initWebComponents().then((_) {
     var container = querySelector('#container') as DivElement;
 
     tearDown(() {

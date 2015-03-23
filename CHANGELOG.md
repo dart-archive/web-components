@@ -1,3 +1,21 @@
+#### 0.11.1
+  * Added `initWebComponents` function which performs html import aware
+    initialization of an application. This is done by crawling all imported
+    documents for dart script tags and initializing them. Any applications using
+    this package should switch to this method instead of calling `run` from the
+    `initialize` package directly.
+  * You may also now just export `package:web_components/init.dart` to
+    initialize your app, and then stick your startup code inside a method marked
+    with `@initMethod`, for instance:
+
+        library my_app;
+        export 'package:web_components/init.dart';
+
+        @initMethod
+        void startup() {
+          // custom app code here.
+        }
+
 #### 0.11.0
   * Add `bindingStartDelimiters` option to the `ImportInlinerTransformer`. Any
     urls which contain any of the supplied delimiters before the first `/` will

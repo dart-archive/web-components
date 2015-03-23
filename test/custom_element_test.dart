@@ -5,7 +5,6 @@ library web_components.test.custom_element_test;
 
 import 'dart:async';
 import 'dart:html';
-import 'package:initialize/initialize.dart' as init;
 import 'package:unittest/html_config.dart';
 import 'package:unittest/unittest.dart';
 import 'package:web_components/web_components.dart';
@@ -34,7 +33,7 @@ class ExtendedElement extends InputElement {
 
 main() {
   useHtmlConfiguration();
-  init.run().then((_) {
+  initWebComponents().then((_) {
     var container = querySelector('#container') as DivElement;
 
     setUp(() {

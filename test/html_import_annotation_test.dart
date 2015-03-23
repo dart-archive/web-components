@@ -7,10 +7,9 @@
 library web_components.test.html_import_annotation;
 
 import 'dart:html';
-import 'package:initialize/initialize.dart' as init;
 import 'package:unittest/html_config.dart';
 import 'package:unittest/unittest.dart';
-import 'package:web_components/html_import_annotation.dart';
+import 'package:web_components/web_components.dart';
 import 'foo/bar.dart';
 
 const String importPath = 'my_import.html';
@@ -19,7 +18,7 @@ main() {
   useHtmlConfiguration();
 
   test('adds import to head', () {
-    return init.run().then((_) {
+    return initWebComponents().then((_) {
       var my_import = document.head.querySelector('link[href="$importPath"]');
       expect(my_import, isNotNull);
       expect(my_import.import.body.text, 'Hello world!\n');

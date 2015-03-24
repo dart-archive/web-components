@@ -9,5 +9,7 @@ library web_components.src.static_initializer;
 import 'dart:async';
 import 'package:initialize/initialize.dart' as init;
 
+const bool deployMode = true;
+
 Future run({List<Type> typeFilter, init.InitializerFilter customFilter}) =>
     init.run(typeFilter: typeFilter, customFilter: customFilter);

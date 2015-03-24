@@ -15,6 +15,8 @@ import 'dart:mirrors';
 import 'dart:html';
 import 'package:initialize/initialize.dart' as init;
 
+const bool deployMode = false;
+
 Future run({List<Type> typeFilter, init.InitializerFilter customFilter}) async {
   var libraryUris = _discoverLibrariesToLoad(document, window.location.href)
       .map(Uri.parse);

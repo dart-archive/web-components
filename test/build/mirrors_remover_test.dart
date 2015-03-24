@@ -18,7 +18,8 @@ main() {
     'a|lib/src/init.dart': '''
         libary web_components.init;
 
-        import 'src/mirror_initializer.dart';
+        import 'src/mirror_initializer.dart' as init;
+        export 'src/mirror_initializer.dart' show deployMode;
 
         foo() {}
         ''',
@@ -26,7 +27,8 @@ main() {
     'a|lib/src/init.dart': '''
         libary web_components.init;
 
-        import 'src/static_initializer.dart';
+        import 'src/static_initializer.dart' as init;
+        export 'src/static_initializer.dart' show deployMode;
 
         foo() {}
         ''',

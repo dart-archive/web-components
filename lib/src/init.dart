@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:initialize/initialize.dart' show InitializerFilter;
 import 'package:web_components/web_components.dart';
 import 'mirror_initializer.dart' as init;
+export 'mirror_initializer.dart' show deployMode;
 
 /// Performs html import aware initialization by crawling all imported documents
 /// and initializing any script tags which appear in them.

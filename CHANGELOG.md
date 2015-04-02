@@ -1,3 +1,7 @@
+#### 0.11.1+2
+  * Added a runtime warning about bad packages paths in html imports to
+    `initWebComponents`.
+
 #### 0.11.1+1
   * fixes unknown HTML elements if using interop_support.js
 

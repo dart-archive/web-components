@@ -14,17 +14,20 @@ import 'dart:collection' show LinkedHashMap;
 import 'dart:mirrors';
 import 'dart:html';
 import 'package:initialize/initialize.dart' as init;
+import 'package:path/path.dart' show url;
 
 const bool deployMode = false;
 
 Future run({List<Type> typeFilter, init.InitializerFilter customFilter}) async {
-  var libraryUris = _discoverLibrariesToLoad(document, window.location.href)
-      .map(Uri.parse);
+  var libraryUris =
+      _discoverLibrariesToLoad(document, window.location.href).map(Uri.parse);
 
   for (var uri in libraryUris) {
     await init.run(
         typeFilter: typeFilter, customFilter: customFilter, from: uri);
   }
+
+  _validatePackageImports(document);
   return null;
 }
 
@@ -33,8 +36,8 @@ Future run({List<Type> typeFilter, init.InitializerFilter customFilter}) async {
 /// called after all HTML imports are resolved. Polymer ensures this by asking
 /// users to put their Dart script tags after all HTML imports (this is checked
 /// by the linter, and Dartium will otherwise show an error message).
-Iterable<_ScriptInfo> _discoverScripts(
-    Document doc, String baseUri, [_State state]) {
+Iterable<_ScriptInfo> _discoverScripts(Document doc, String baseUri,
+    [_State state]) {
   if (state == null) state = new _State();
   if (doc == null) {
     print('warning: $baseUri not found.');
@@ -82,7 +85,6 @@ class _ScriptInfo {
   _ScriptInfo(this.resolvedUrl, {this.packageUrl});
 }
 
-
 // TODO(sigmund): explore other (cheaper) ways to resolve URIs relative to the
 // root library (see dartbug.com/12612)
 final _rootUri = currentMirrorSystem().isolate.rootLibrary.uri;
@@ -100,8 +102,8 @@ _ScriptInfo _scriptInfoFor(script, baseUri) {
     // to the packages folder. If users don't create symlinks in the source
     // tree, then Dartium will also complain because it won't find the file seen
     // in an HTML import.
-    var packagePath = uri.path.substring(
-        uri.path.lastIndexOf('packages/') + 'packages/'.length);
+    var packagePath = uri.path
+        .substring(uri.path.lastIndexOf('packages/') + 'packages/'.length);
     return new _ScriptInfo('$uri', packageUrl: 'package:$packagePath');
   }
 
@@ -130,3 +132,66 @@ final _libs = currentMirrorSystem().libraries;
 
 bool _packageUrlExists(_ScriptInfo info) =>
     info.isPackage && _libs[Uri.parse(info.packageUrl)] != null;
+
+/// All the imports that we have checked for package path validation.
+final _importsSeen = new Set<LinkElement>();
+
+/// All the documents that we have crawled for import validation.
+final _documentsSeen = new Set<Document>();
+
+/// Validates that all html imports to packages urls point to the right packages
+/// symlink (the one next to the entry point).
+void _validatePackageImports(Document doc) {
+  var imports = doc.querySelectorAll('link[rel="import"]');
+  for (LinkElement import in imports) {
+    // Don't re-validate imports.
+    if (!_importsSeen.add(import)) continue;
+
+    // Check that the href points to the right packages path. If it doesn't we
+    // don't continue checking as it will print extraneous errors.
+    if (import.href.contains('packages/') && !_checkPackagePath(import)) {
+      continue;
+    }
+
+    // Validate any imports contained in this import, if the document hasn't yet
+    // been seen.
+    var importDoc = import.import;
+    if (!_documentsSeen.add(importDoc)) continue;
+    _validatePackageImports(importDoc);
+  }
+}
+
+/// The path to the entry document.
+final entryPath = document.baseUri;
+
+/// Checks that the relative path from the entry point to all packages imports
+/// starts with `packages/`.
+bool _checkPackagePath(LinkElement import) {
+  var pathFromEntryPoint =
+      url.relative(import.href, from: url.dirname(entryPath));
+  if (pathFromEntryPoint.startsWith('packages/')) return true;
+
+  LinkElement correctedImport = import.clone(false);
+
+  var relativeUriParts = url.split(
+      url.relative(import.ownerDocument.baseUri, from: url.dirname(entryPath)));
+  var pathToEntryPoint = '../' * (relativeUriParts.length - 1);
+  var packagePath = import.href.substring(import.href.indexOf('packages/'));
+  correctedImport.href = '$pathToEntryPoint$packagePath';
+
+  // TODO(jakemac): Throw an exception here at the next breaking change, and add
+  // a test at that point (no easy way to test console.error).
+  window.console.error('''
+Found bad packages uri in html import. All packages uris should point to the
+packages symlink in the same folder as the entry point.
+
+Entry point: $entryPath
+Owner document: ${import.ownerDocument.baseUri}
+Current import: ${import.outerHtml}
+Corrected import: ${correctedImport.outerHtml}
+
+For more information, please see:
+https://www.dartlang.org/polymer/app-directories.html#into-a-non-dart-non-entry-point
+''');
+  return false;
+}

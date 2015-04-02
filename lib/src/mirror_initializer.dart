@@ -156,7 +156,7 @@ void _validatePackageImports(Document doc) {
     // Validate any imports contained in this import, if the document hasn't yet
     // been seen.
     var importDoc = import.import;
-    if (!_documentsSeen.add(importDoc)) continue;
+    if (importDoc == null || !_documentsSeen.add(importDoc)) continue;
     _validatePackageImports(importDoc);
   }
 }

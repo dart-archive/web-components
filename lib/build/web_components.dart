@@ -11,7 +11,7 @@ import 'package:code_transformers/assets.dart';
 import 'package:code_transformers/messages/build_logger.dart';
 import 'package:code_transformers/resolver.dart';
 import 'package:code_transformers/src/dart_sdk.dart' as dart_sdk;
-import 'package:html5lib/dom.dart' as dom;
+import 'package:html/dom.dart' as dom;
 import 'package:initialize/transformer.dart' show generateBootstrapFile;
 import 'package:initialize/build/initializer_plugin.dart';
 import 'package:path/path.dart' as path;

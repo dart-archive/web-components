@@ -1,3 +1,6 @@
+#### 0.11.1+3
+  * Switch `html5lib` package dependency to `html`.
+
 #### 0.11.1+2
   * Added a runtime warning about bad packages paths in html imports to
     `initWebComponents`.

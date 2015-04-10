@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:barback/barback.dart';
 import 'package:code_transformers/tests.dart';
 import 'package:code_transformers/messages/build_logger.dart';
-import 'package:html5lib/dom.dart' show Document;
+import 'package:html/dom.dart' show Document;
 import 'package:web_components/build/common.dart';
 import 'package:web_components/build/import_crawler.dart';
 import 'package:unittest/compact_vm_config.dart';

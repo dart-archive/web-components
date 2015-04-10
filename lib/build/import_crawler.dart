@@ -8,7 +8,7 @@ import 'dart:collection' show LinkedHashMap;
 import 'package:code_transformers/assets.dart';
 import 'package:code_transformers/messages/build_logger.dart';
 import 'package:barback/barback.dart';
-import 'package:html5lib/dom.dart' show Document, Element;
+import 'package:html/dom.dart' show Document, Element;
 import 'common.dart';
 import 'messages.dart';
 

@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 library web_components.custom_element_proxy;
 
+import 'dart:js' as js;
 import 'package:initialize/initialize.dart';
 import 'interop.dart';
 
@@ -20,5 +21,19 @@ class CustomElementProxy implements Initializer<Type> {
 
   void initialize(Type t) {
     registerDartType(tagName, t, extendsTag: extendsTag);
+  }
+}
+
+/// A simple mixin to make it easier to interoperate with the Javascript API of
+/// a browser object. This is mainly used by classes that expose a Dart API for
+/// Javascript custom elements.
+class CustomElementProxyMixin {
+  js.JsObject _proxy;
+
+  js.JsObject get jsElement {
+    if (_proxy == null) {
+      _proxy = new js.JsObject.fromBrowserObject(this);
+    }
+    return _proxy;
   }
 }

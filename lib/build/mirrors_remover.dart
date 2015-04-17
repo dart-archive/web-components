@@ -17,9 +17,9 @@ class MirrorsRemoverTransformer extends Transformer {
   @override
   Future apply(Transform transform) async {
     String source = await transform.primaryInput.readAsString();
-    source = source.replaceAll(
-        'mirror_initializer.dart', 'static_initializer.dart');
-    transform.addOutput(
-        new Asset.fromString(transform.primaryInput.id, source));
+    source =
+        source.replaceAll('mirror_initializer.dart', 'static_initializer.dart');
+    transform
+        .addOutput(new Asset.fromString(transform.primaryInput.id, source));
   }
 }

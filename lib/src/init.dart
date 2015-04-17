@@ -23,8 +23,9 @@ Future initWebComponents({List<Type> typeFilter, InitializerFilter customFilter,
   if (typeFilter != null || customFilter != null) {
     return init.run(typeFilter: typeFilter, customFilter: customFilter);
   } else {
-    return init.run(typeFilter: [HtmlImport])
-      .then((_) => init.run(typeFilter: [CustomElement, CustomElementProxy]))
-      .then((_) => initAll ? init.run() : null);
+    return init
+        .run(typeFilter: [HtmlImport])
+        .then((_) => init.run(typeFilter: [CustomElement, CustomElementProxy]))
+        .then((_) => initAll ? init.run() : null);
   }
 }

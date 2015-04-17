@@ -1,3 +1,23 @@
+#### 0.11.2
+  * Copied `DomProxyMixin` from `custom_element_apigen` to this package and
+    renamed it `CustomElementProxyMixin`. This can be mixed into any class that
+    is using the `@CustomElementProxy` annotation and provides easy access to
+    the underlying javascript element via the `jsElement` getter. For instance
+    the following is a simple example of a dart class that wraps a custom
+    javascript element `foo-element` with a method `doFoo` and a property `foo`.
+
+        @CustomElementProxy('foo-element')
+        class FooElement extends HtmlElement with CustomElementProxyMixin {
+          FooElement.created() : super.created();
+
+          void doFoo(int arg1) => jsElement.callMethod('doFoo', [arg1]);
+
+          int get foo => jsElement['foo'];
+          void set foo(int newFoo) {
+            jsElement['foo'] = newFoo;
+          }
+        }
+
 #### 0.11.1+3
   * Switch `html5lib` package dependency to `html`.
 

@@ -119,7 +119,7 @@ class ScriptCompactor {
     var mainScriptPath = _importPath(mainScript, primaryInput);
     buffer.writeln("import '$mainScriptPath' as i$i;");
     buffer.writeln();
-    buffer.writeln('void main() { i$i.main(); }');
+    buffer.writeln('main() => i$i.main();');
 
     var bootstrap = new Asset.fromString(bootstrapId, '$buffer');
     transform.addOutput(bootstrap);

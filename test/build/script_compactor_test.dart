@@ -40,7 +40,7 @@ void basicTests() {
 
         import 'index.dart' as i0;
 
-        void main() { i0.main(); }''',
+        main() => i0.main();''',
     'a|web/index.dart': '''
         library a.index;
         main(){}''',
@@ -85,7 +85,7 @@ void basicTests() {
         import 'package:b/a.dart' as i2;
         import 'index.dart' as i3;
 
-        void main() { i3.main(); }''',
+        main() => i3.main();''',
     'b|lib/a.html': '''
         <link rel="import" href="b/b.html">
         <link rel="import" href="../../packages/c/c.html">
@@ -136,7 +136,7 @@ void basicTests() {
         import 'index.html.0.dart' as i0;
         import 'index.html.1.dart' as i1;
 
-        void main() { i1.main(); }''',
+        main() => i1.main();''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('Cleans library names generated from file paths.', phases, {
@@ -201,7 +201,7 @@ void codeExtractorTests() {
 
         import 'test.html.0.dart' as i0;
 
-        void main() { i0.main(); }''',
+        main() => i0.main();''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('single script, with library', phases, {
@@ -225,7 +225,7 @@ void codeExtractorTests() {
 
         import 'test.html.0.dart' as i0;
 
-        void main() { i0.main(); }''',
+        main() => i0.main();''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('under lib/ directory not transformed', phases, {
@@ -287,7 +287,7 @@ void codeExtractorTests() {
         import 'test.html.3.dart' as i3;
         import 'test.dart' as i4;
 
-        void main() { i4.main(); }
+        main() => i4.main();
         ''',
     'a|web/test.html.0.dart': '''
         library a.web.test_html_0;

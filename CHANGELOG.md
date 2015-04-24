@@ -1,3 +1,7 @@
+#### 0.11.3
+  * Add support for the new `link[rel="x-dart-test"]` tags from the `test`
+    package to the transformer.
+
 #### 0.11.2
   * Copied `DomProxyMixin` from `custom_element_apigen` to this package and
     renamed it `CustomElementProxyMixin`. This can be mixed into any class that

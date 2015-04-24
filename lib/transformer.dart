@@ -12,6 +12,8 @@ import 'build/import_inliner.dart';
 export 'build/import_inliner.dart';
 import 'build/script_compactor.dart';
 export 'build/script_compactor.dart';
+import 'build/test_compatibility.dart';
+export 'build/test_compatibility.dart';
 import 'build/web_components.dart';
 export 'build/web_components.dart';
 
@@ -41,6 +43,10 @@ List<List<Transformer>> createDeployPhases(TransformOptions options,
     {String sdkDir}) {
   var phases = [];
 
+  /// Must happen first, temporarily rewrites <link rel="x-dart-test"> tags to
+  /// <script type="application/dart" _was_test></script> tags.
+  phases.add([new RewriteXDartTestToScript(options.entryPoints)]);
+
   // Must happen before the WebComponents transformer, grabs all dart scripts
   // and combines them into one bootstrap file.
   phases.add([new ScriptCompactorTransformer(options.entryPoints)]);
@@ -51,6 +57,11 @@ List<List<Transformer>> createDeployPhases(TransformOptions options,
 
   // Inlines all html imports and removes all dart script tags in the process.
   phases.add([new ImportInlinerTransformer(options.entryPoints)]);
+
+  /// Must happen last, rewrites
+  /// <script type="application/dart" _was_test></script> tags to
+  /// <link rel="x-dart-test"> tags.
+  phases.add([new RewriteScriptToXDartTest(options.entryPoints)]);
   return phases;
 }
 

@@ -9,7 +9,7 @@ import 'package:unittest/compact_vm_config.dart';
 import 'common.dart';
 
 var transformer = new WebComponentsTransformerGroup(
-    new TransformOptions(['web/index.html'], false));
+    new TransformOptions(['web/index.html', 'test/index.html'], false));
 var phases = [[transformer]];
 
 main() {
@@ -169,6 +169,37 @@ main() {
               <script>var y;</script>
             </div>
           </body>
+        </html>
+        ''',
+  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('test compatibility', phases, {
+    'a|test/index.html': '''
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <link rel="x-dart-test" href="index.dart">
+            <script src="packages/test/dart.js"></script>
+          </head>
+          <body></body>
+        </html>
+        ''',
+    'a|test/index.dart': '''
+        library a;
+
+        main() {}
+        ''',
+    'initialize|lib/initialize.dart': mockInitialize,
+    'web_components|lib/html_import_annotation.dart': mockHtmlImportAnnotation,
+  }, {
+    'a|test/index.html': '''
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <link rel="x-dart-test" href="index.bootstrap.initialize.dart">
+            <script src="packages/test/dart.js"></script>
+          </head>
+          <body></body>
         </html>
         ''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);

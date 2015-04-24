@@ -1,3 +1,6 @@
+#### 0.11.3+1
+  * Fix bootstrap to return the result of the original main.
+
 #### 0.11.3
   * Add support for the new `link[rel="x-dart-test"]` tags from the `test`
     package to the transformer.

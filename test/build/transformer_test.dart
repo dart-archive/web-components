@@ -103,7 +103,7 @@ main() {
         import 'package:b/foo.dart' as i1;
         import 'index.dart' as i2;
 
-        void main() { i2.main(); }
+        main() => i2.main();
         ''',
     'a|web/index.html.0.dart': '''
         // Must use package:urls inside inline script tags,

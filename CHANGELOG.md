@@ -1,3 +1,6 @@
+#### 0.11.4
+  * Update to analyzer <=0.26.0.
+
 #### 0.11.3+1
   * Fix bootstrap to return the result of the original main.
 

@@ -93,7 +93,7 @@ main() {
             new InitEntry(i3.initMethod, i1.bar),
             new InitEntry(i3.initMethod, i4.startup),
           ]);
-          i0.main();
+          return i0.main();
         }
         ''',
     'a|web/index.bootstrap.dart': '''

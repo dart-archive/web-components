@@ -93,7 +93,7 @@ main() {
             new InitEntry(i4.initMethod, i5.foo),
           ]);
 
-          i0.main();
+          return i0.main();
         }
         '''
   }, [

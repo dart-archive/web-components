@@ -1,3 +1,6 @@
+#### 0.11.5
+  * Delete `lib/webcomponents.js` in release mode to reduce output size.
+
 #### 0.11.4
   * Update to analyzer <=0.26.0.
 

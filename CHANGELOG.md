@@ -1,5 +1,9 @@
+#### 0.11.4+1
+  * Fix erroneous messages about invalid package paths in html imports
+    [72](https://github.com/dart-lang/polymer-dart/issues/72).
+
 #### 0.11.4
-  * Update to analyzer <=0.26.0.
+  * Update to analyzer `<0.26.0`.
 
 #### 0.11.3+1
   * Fix bootstrap to return the result of the original main.

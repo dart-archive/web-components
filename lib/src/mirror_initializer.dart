@@ -167,8 +167,8 @@ final entryPath = document.baseUri;
 /// Checks that the relative path from the entry point to all packages imports
 /// starts with `packages/`.
 bool _checkPackagePath(LinkElement import) {
-  var pathFromEntryPoint =
-      url.relative(import.href, from: url.dirname(entryPath));
+  var dirname = entryPath.endsWith('/') ? entryPath : url.dirname(entryPath);
+  var pathFromEntryPoint = url.relative(import.href, from: dirname);
   if (pathFromEntryPoint.startsWith('packages/')) return true;
 
   LinkElement correctedImport = import.clone(false);

@@ -1,3 +1,11 @@
+#### 0.12.0
+  * Update to js version
+    [0.7.3](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.3).
+  * Some release notes
+    (here)[http://webcomponents.org/articles/polyfills-0-6-0/].
+  * Also added all the individual polyfills as well as the
+    `webcomponents-lite.js` version, which does not include shadow dom.
+    
 #### 0.11.4+2
   * Don't inline type="css" imports.
 

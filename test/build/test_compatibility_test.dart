@@ -35,7 +35,6 @@ main() {
         </html>''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-
   testPhases('can rewrite script tags to x-dart-test link tags', [[end]], {
     'a|test/index.html': '''
         <!DOCTYPE html>
@@ -56,7 +55,6 @@ main() {
           <body></body>
         </html>''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
-
 
   testPhases('restores original application at the end', [[start], [end]], {
     'a|test/index.html': '''

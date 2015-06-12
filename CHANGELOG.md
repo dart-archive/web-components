@@ -1,3 +1,6 @@
+#### 0.11.4+2
+  * Don't inline type="css" imports.
+
 #### 0.11.4+1
   * Fix erroneous messages about invalid package paths in html imports
     [72](https://github.com/dart-lang/polymer-dart/issues/72).

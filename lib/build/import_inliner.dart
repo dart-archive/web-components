@@ -71,13 +71,16 @@ class ImportInliner {
       if (imports.length > 1) {
         _inlineImports(primaryDocument, imports);
       } else if (!changed &&
-          primaryDocument.querySelectorAll('link[rel="import"]').length == 0) {
+          primaryDocument.querySelectorAll('link[rel="import"]').where(
+                  (import) => import.attributes['type'] != 'css').length ==
+              0) {
         // If there were no url changes and no imports, then we are done.
         return;
       }
 
       primaryDocument
           .querySelectorAll('link[rel="import"]')
+          .where((import) => import.attributes['type'] != 'css')
           .forEach((element) => element.remove());
 
       transform.addOutput(

@@ -54,7 +54,9 @@ class ImportCrawler {
       seen.add(assetId);
 
       Future crawlImports(Document document) {
-        var imports = document.querySelectorAll('link[rel="import"]');
+        var imports = document
+            .querySelectorAll('link[rel="import"]')
+            .where((import) => import.attributes['type'] != 'css');
         var done = Future.forEach(imports,
             (i) => doCrawl(_importId(assetId, i), import: i, from: assetId));
 

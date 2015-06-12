@@ -51,8 +51,8 @@ class RewriteScriptToXDartTest extends _EntryPointOnlyTransformer {
   Future apply(Transform transform) {
     return transform.primaryInput.readAsString().then((String html) {
       var doc = parse(html);
-      var scripts = doc.querySelectorAll(
-          'script[type="application/dart"][$testAttribute]');
+      var scripts = doc
+          .querySelectorAll('script[type="application/dart"][$testAttribute]');
       for (var tag in scripts) {
         tag.replaceWith(new Element.tag('link')
           ..attributes['rel'] = 'x-dart-test'

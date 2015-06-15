@@ -1,7 +1,7 @@
 name: web_components
 version: 0.12.0
 author: Polymer.dart Authors <web-ui-dev@dartlang.org>
-homepage: https://www.dartlang.org/polymer-dart/
+homepage: https://github.com/dart-lang/web-components/
 description: >
   Polyfills for Shadow DOM, Custom Elements, and HTML Imports.
   Custom Elements let authors define their own elements. Authors associate code

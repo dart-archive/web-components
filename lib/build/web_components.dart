@@ -59,7 +59,6 @@ class WebComponentsTransformer extends Transformer {
     if (options.entryPoints != null) {
       return options.entryPoints.contains(id.path);
     }
-    if (id.path == 'web/index.bootstrap.dart') return true;
     // If no entry point is supplied, then any html file under web/ or test/ is
     // an entry point.
     return (id.path.startsWith('web/') || id.path.startsWith('test/')) &&
@@ -92,6 +91,7 @@ class WebComponentsTransformer extends Transformer {
         transform
             .addOutput(new Asset.fromString(primaryInput.id, doc.outerHtml));
         transform.addOutput(bootstrap);
+        resolver.release();
       });
     });
   }

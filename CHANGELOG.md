@@ -1,3 +1,7 @@
+#### 0.12.0+1
+  * Fix hang on reload with the `web_components` transformer in pub serve,
+    [27](https://github.com/dart-lang/web-components/issues/27).
+
 #### 0.12.0
   * Update to js version
     [0.7.3](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.3).

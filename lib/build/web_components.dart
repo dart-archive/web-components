@@ -49,7 +49,7 @@ Asset generateWebComponentsBootstrap(Resolver resolver, Transform transform,
 /// A [Transformer] which runs the `initialize` transformer with
 /// some special plugins and also inlines the html imports.
 class WebComponentsTransformer extends Transformer {
-  Resolvers _resolvers;
+  final Resolvers _resolvers;
   TransformOptions options;
 
   WebComponentsTransformer(this.options)
@@ -74,8 +74,7 @@ class WebComponentsTransformer extends Transformer {
       var mainScriptTag = doc.querySelector('script[type="$dartType"]');
       var scriptId = uriToAssetId(primaryInput.id,
           mainScriptTag.attributes['src'], logger, mainScriptTag.sourceSpan);
-          
-      _resolvers = new Resolvers.fromMock(dart_sdk.mockSdkSources);
+
       return _resolvers.get(transform, [scriptId]).then((resolver) {
         var newScriptId = new AssetId(scriptId.package,
             '${path.url.withoutExtension(scriptId.path)}.initialize.dart');

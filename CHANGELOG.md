@@ -1,3 +1,6 @@
+#### 0.12.0+2
+  * Don't create new resolvers each time the transformer runs on a file.
+
 #### 0.12.0+1
   * Fix hang on reload with the `web_components` transformer in pub serve,
     [27](https://github.com/dart-lang/web-components/issues/27).

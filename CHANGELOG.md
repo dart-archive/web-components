@@ -1,3 +1,6 @@
+#### 0.12.0+3
+  * Update analyzer dependency to `<0.27.0` and fix up some tests.
+
 #### 0.12.0+2
   * Don't create new resolvers each time the transformer runs on a file.
 

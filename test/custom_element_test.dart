@@ -47,9 +47,9 @@ main() {
     test('basic custom element', () {
       expect(document.querySelector('basic-element') is BasicElement, isTrue);
       container.append(new BasicElement());
-      container.appendHtml('<basic-element></basic-element>');
-      // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
-      // why? https://github.com/dart-lang/web-components/issues/4
+      container.appendHtml('<basic-element></basic-element>',
+          treeSanitizer: nullSanitizer);
+      // elements are upgraded asynchronously
       return new Future(() {}).then((_) {
         var elements = container.querySelectorAll('basic-element');
         expect(elements.length, 2);
@@ -62,9 +62,9 @@ main() {
     test('child custom element', () {
       expect(document.querySelector('child-element') is ChildElement, isTrue);
       container.append(new ChildElement());
-      container.appendHtml('<child-element></child-element>');
-      // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
-      // why? https://github.com/dart-lang/web-components/issues/4
+      container.appendHtml('<child-element></child-element>',
+          treeSanitizer: nullSanitizer);
+      // elements are upgraded asynchronously
       return new Future(() {}).then((_) {
         var elements = container.querySelectorAll('child-element');
         expect(elements.length, 2);
@@ -77,9 +77,9 @@ main() {
     test('extends input element', () {
       expect(document.querySelector('input') is ExtendedElement, isTrue);
       container.append(new ExtendedElement());
-      container.appendHtml('<input is="extended-element" />');
-      // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
-      // why? https://github.com/dart-lang/web-components/issues/4
+      container.appendHtml('<input is="extended-element" />',
+          treeSanitizer: nullSanitizer);
+      // elements are upgraded asynchronously
       return new Future(() {}).then((_) {
         var elements = container.querySelectorAll('input');
         expect(elements.length, 2);
@@ -90,3 +90,10 @@ main() {
     });
   });
 }
+
+class NullTreeSanitizer implements NodeTreeSanitizer {
+  const NullTreeSanitizer();
+  void sanitizeTree(Node node) {}
+}
+
+final nullSanitizer = const NullTreeSanitizer();

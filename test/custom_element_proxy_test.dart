@@ -42,7 +42,8 @@ main() {
 
     test('basic custom element', () {
       container.append(new BasicElement());
-      container.appendHtml('<basic-element></basic_element>');
+      container.appendHtml('<basic-element></basic_element>',
+          treeSanitizer: nullSanitizer);
       // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
       // why? https://github.com/dart-lang/web-components/issues/4
       return new Future(() {}).then((_) {
@@ -58,7 +59,8 @@ main() {
 
     test('extends custom element', () {
       container.append(new ExtendedElement());
-      container.appendHtml('<input is="extended-element" />');
+      container.appendHtml('<input is="extended-element" />',
+          treeSanitizer: nullSanitizer);
       // TODO(jakemac): after appendHtml elements are upgraded asynchronously,
       // why? https://github.com/dart-lang/web-components/issues/4
       return new Future(() {}).then((_) {
@@ -71,3 +73,10 @@ main() {
     });
   });
 }
+
+class NullTreeSanitizer implements NodeTreeSanitizer {
+  const NullTreeSanitizer();
+  void sanitizeTree(Node node) {}
+}
+
+final nullSanitizer = const NullTreeSanitizer();

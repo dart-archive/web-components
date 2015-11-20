@@ -232,13 +232,14 @@ String _libraryNameFor(AssetId id, [int suffix]) {
   var name = '${path.withoutExtension(id.path)}_'
       '${path.extension(id.path).substring(1)}';
   if (name.startsWith('lib/')) name = name.substring(4);
-  name = name.split('/').map((part) {
-    part = part.replaceAll(_invalidLibCharsRegex, '_');
-    if (part.startsWith(_numRegex)) part = '_${part}';
-    return part;
-  }).join(".");
+  validLibName(String name) {
+    name = name.replaceAll(_invalidLibCharsRegex, '_');
+    if (name.startsWith(_numRegex)) name = '_${name}';
+    return name;
+  }
+  name = name.split('/').map(validLibName).join(".");
   var suffixString = suffix != null ? '_$suffix' : '';
-  return '${id.package}.${name}$suffixString';
+  return '${validLibName(id.package)}.${name}$suffixString';
 }
 
 /// Parse [code] and determine whether it has a library directive.

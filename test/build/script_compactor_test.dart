@@ -173,6 +173,30 @@ void basicTests() {
     // Replace invalid character followed by number.
     'a|web/%05_test.html.0.dart': 'library a.web._05_test_html_0;\n/*5*/',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('package and file names with hyphens', phases, {
+    'a-b|web/a-b.html': '''
+        <!DOCTYPE html><html><head></head><body>
+          <script type="application/dart" src="a-b.dart"></script>
+        </body></html>''',
+    'a-b|web/a-b.dart': '''
+        library a_b.a_b;
+        main(){}''',
+  }, {
+    'a-b|web/a-b.html': '''
+        <!DOCTYPE html><html><head></head><body>
+        <script type="application/dart" src="a-b.bootstrap.dart"></script>
+        </body></html>''',
+    'a-b|web/a-b.bootstrap.dart': '''
+        library a_b.web.a_b_bootstrap_dart;
+
+        import 'a-b.dart' as i0;
+
+        main() => i0.main();''',
+    'a-b|web/a-b.dart': '''
+        library a_b.a_b;
+        main(){}''',
+  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void codeExtractorTests() {

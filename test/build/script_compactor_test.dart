@@ -174,29 +174,43 @@ void basicTests() {
     'a|web/%05_test.html.0.dart': 'library a.web._05_test_html_0;\n/*5*/',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('package and file names with hyphens', phases, {
-    'a-b|web/a-b.html': '''
+  testPhases('file names with hyphens are ok', phases, {
+    'a|web/a-b.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a-b.dart"></script>
         </body></html>''',
-    'a-b|web/a-b.dart': '''
-        library a_b.a_b;
+    'a|web/a-b.dart': '''
+        library a.a_b;
         main(){}''',
   }, {
-    'a-b|web/a-b.html': '''
+    'a|web/a-b.html': '''
         <!DOCTYPE html><html><head></head><body>
         <script type="application/dart" src="a-b.bootstrap.dart"></script>
         </body></html>''',
-    'a-b|web/a-b.bootstrap.dart': '''
-        library a_b.web.a_b_bootstrap_dart;
+    'a|web/a-b.bootstrap.dart': '''
+        library a.web.a_b_bootstrap_dart;
 
         import 'a-b.dart' as i0;
 
         main() => i0.main();''',
-    'a-b|web/a-b.dart': '''
-        library a_b.a_b;
+    'a|web/a-b.dart': '''
+        library a.a_b;
         main(){}''',
   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('package names with hyphens give an error', phases, {
+    'a-b|web/a.html': '''
+        <!DOCTYPE html><html><head></head><body>
+          <script type="application/dart" src="a.dart"></script>
+        </body></html>''',
+    'a-b|web/a.dart': '''
+        library a.a;
+        main(){}''',
+  }, {}, [
+    'error: Invalid package name `a-b`. Package names should be '
+    'valid dart identifiers, as indicated at '
+    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void codeExtractorTests() {

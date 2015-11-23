@@ -1,5 +1,6 @@
 #### 0.12.0+4
-  * Support package names with hyphens (even though it violates dart style).
+  * The transformer will now give an informative error on package names with
+    hyphens.
 
 #### 0.12.0+3
   * Update analyzer dependency to `<0.27.0` and fix up some tests.

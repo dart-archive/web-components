@@ -108,7 +108,7 @@ class ScriptCompactor {
         primaryInput.path.replaceFirst('.html', '.bootstrap.dart'));
 
     var buffer = new StringBuffer();
-    buffer.writeln('library ${_libraryNameFor(bootstrapId)};');
+    buffer.writeln('library ${_libraryNameFor(bootstrapId, logger)};');
     buffer.writeln();
     var i = 0;
     for (var script in importScripts) {
@@ -147,7 +147,7 @@ class ScriptCompactor {
       // TODO(sigmund): ensure this path is unique (dartbug.com/12618).
       var newId = primaryInput.addExtension('.$count.dart');
       if (!_hasLibraryDirective(code)) {
-        var libName = _libraryNameFor(primaryInput, count);
+        var libName = _libraryNameFor(primaryInput, logger, count);
         code = "library $libName;\n$code";
       }
 
@@ -228,15 +228,21 @@ class ScriptCompactor {
 }
 
 /// Generate a library name for an asset.
-String _libraryNameFor(AssetId id, [int suffix]) {
+String _libraryNameFor(AssetId id, BuildLogger logger, [int suffix]) {
+  if (id.package.contains(_invalidLibCharsRegex)) {
+    logger.error('Invalid package name `${id.package}`. Package names should '
+        'be valid dart identifiers, as indicated at '
+        'https://www.dartlang.org/tools/pub/pubspec.html#name.');
+  }
   var name = '${path.withoutExtension(id.path)}_'
       '${path.extension(id.path).substring(1)}';
   if (name.startsWith('lib/')) name = name.substring(4);
-  name = name.split('/').map((part) {
-    part = part.replaceAll(_invalidLibCharsRegex, '_');
-    if (part.startsWith(_numRegex)) part = '_${part}';
-    return part;
-  }).join(".");
+  validLibName(String name) {
+    name = name.replaceAll(_invalidLibCharsRegex, '_');
+    if (name.startsWith(_numRegex)) name = '_${name}';
+    return name;
+  }
+  name = name.split('/').map(validLibName).join(".");
   var suffixString = suffix != null ? '_$suffix' : '';
   return '${id.package}.${name}$suffixString';
 }

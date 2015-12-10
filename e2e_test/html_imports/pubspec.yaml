@@ -1,11 +1,10 @@
 name: html_imports
 dependencies:
-  browser: '^0.10.0'
   initialize: any
   web_components:
     path: '../../'
 dev_dependencies:
-  unittest: '^0.11.0'
+  test: '^0.12.0'
 transformers:
 - web_components:
     $include: '**/*_test.html'

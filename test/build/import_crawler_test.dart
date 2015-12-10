@@ -1,6 +1,7 @@
 // Copyright (c) 2015, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+@TestOn('vm')
 library web_components.test.build.import_crawler_test;
 
 import 'dart:async';
@@ -10,7 +11,7 @@ import 'package:code_transformers/messages/build_logger.dart';
 import 'package:html/dom.dart' show Document;
 import 'package:web_components/build/common.dart';
 import 'package:web_components/build/import_crawler.dart';
-import 'package:unittest/compact_vm_config.dart';
+import 'package:test/test.dart';
 
 class _TestTransformer extends Transformer {
   final String _entryPoint;
@@ -48,7 +49,6 @@ class _TestTransformer extends Transformer {
 }
 
 main() {
-  useCompactVMConfiguration();
   runTests([[new _TestTransformer('web/index.html')]]);
   // Test with a preparsed original document as well.
   runTests([[new _TestTransformer('web/index.html', true)]]);

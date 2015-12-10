@@ -1,12 +1,12 @@
 // Copyright (c) 2015, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+@TestOn('browser')
 library web_components.test.custom_element_test;
 
 import 'dart:async';
 import 'dart:html';
-import 'package:unittest/html_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:web_components/web_components.dart';
 
 @CustomElement('basic-element')
@@ -32,7 +32,6 @@ class ExtendedElement extends InputElement {
 }
 
 main() {
-  useHtmlConfiguration();
   initWebComponents().then((_) {
     var container = querySelector('#container') as DivElement;
 

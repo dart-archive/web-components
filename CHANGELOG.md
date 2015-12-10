@@ -1,3 +1,6 @@
+#### 0.12.1
+  * Update analyzer to `^0.27.0` and update to the test package.
+
 #### 0.12.0+4
   * The transformer will now give an informative error on package names with
     hyphens.

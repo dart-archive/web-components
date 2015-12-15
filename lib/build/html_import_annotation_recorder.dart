@@ -67,11 +67,11 @@ class HtmlImportAnnotationRecorder implements InitializerPlugin {
     if (annotationElement.element is PropertyAccessorElement) {
       originalImportPath = resolver.evaluateConstant(
               element.library, annotation.name).value.fields[
-          'filePath'].stringValue;
+          'filePath'].toStringValue();
     } else {
       assert(annotationElement.element is ConstructorElement);
       originalImportPath = resolver.evaluateConstant(element.library,
-          annotation.arguments.arguments.first).value.stringValue;
+          annotation.arguments.arguments.first).value.toStringValue();
     }
 
     var libPath;

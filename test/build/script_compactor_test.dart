@@ -1,20 +1,18 @@
 // Copyright (c) 2015, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+@TestOn('vm')
 library web_components.test.build.script_compactor_test;
 
 import 'package:code_transformers/tests.dart';
 import 'package:web_components/build/messages.dart';
 import 'package:web_components/build/script_compactor.dart';
-import 'package:unittest/compact_vm_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 var transformer = new ScriptCompactorTransformer();
 var phases = [[transformer]];
 
 main() {
-  useCompactVMConfiguration();
-
   group('basic', basicTests);
   group('code extraction tests', codeExtractorTests);
   group('fixes import/export/part URIs', dartUriTests);

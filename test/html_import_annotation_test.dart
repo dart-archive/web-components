@@ -1,34 +1,27 @@
 // Copyright (c) 2015, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+@TestOn('browser')
 @HtmlImport(importPath)
-// This one will throw a build time warning, but should still work dynamically.
-@HtmlImport('bad_import.html')
 library web_components.test.html_import_annotation;
 
 import 'dart:html';
-import 'package:unittest/html_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:web_components/web_components.dart';
 import 'foo/bar.dart';
 
 const String importPath = 'my_import.html';
 
-main() {
-  useHtmlConfiguration();
+main() async {
+  await initWebComponents();
 
   test('adds import to head', () {
-    return initWebComponents().then((_) {
-      var my_import = document.head.querySelector('link[href="$importPath"]');
-      expect(my_import, isNotNull);
-      expect(my_import.import.body.text, 'Hello world!\n');
+    var my_import = document.head.querySelector('link[href="$importPath"]');
+    expect(my_import, isNotNull);
+    expect(my_import.import.body.text, 'Hello world!\n');
 
-      var bar = document.head.querySelector('link[href="foo/bar.html"]');
-      expect(bar, isNotNull);
-      expect(bar.import.body.text, 'bar\n');
-
-      var bad = document.head.querySelector('link[href="bad_import.html"]');
-      expect(bad.import, isNull);
-    });
+    var bar = document.head.querySelector('link[href="foo/bar.html"]');
+    expect(bar, isNotNull);
+    expect(bar.import.body.text, 'bar\n');
   });
 }

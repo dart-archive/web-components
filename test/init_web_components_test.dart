@@ -2,10 +2,10 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 @initializeTracker
+@TestOn('browser')
 library web_components.test.init_web_components_test;
 
-import 'package:unittest/html_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:initialize/initialize.dart' show LibraryIdentifier;
 import 'package:initialize/src/initialize_tracker.dart';
 import 'package:web_components/web_components.dart';
@@ -13,8 +13,6 @@ import 'package:web_components/web_components.dart';
 const String importPath = 'my_import.html';
 
 main() {
-  useHtmlConfiguration();
-
   test('can initialize scripts from html imports', () {
     return initWebComponents().then((_) {
       var expectedInitializers = [

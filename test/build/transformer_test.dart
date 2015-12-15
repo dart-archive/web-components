@@ -1,11 +1,12 @@
 // Copyright (c) 2015, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+@TestOn('vm')
 library web_components.test.build.transformer_test;
 
 import 'package:code_transformers/tests.dart';
 import 'package:web_components/transformer.dart';
-import 'package:unittest/compact_vm_config.dart';
+import 'package:test/test.dart';
 import 'common.dart';
 
 var transformer = new WebComponentsTransformerGroup(
@@ -13,8 +14,6 @@ var transformer = new WebComponentsTransformerGroup(
 var phases = [[transformer]];
 
 main() {
-  useCompactVMConfiguration();
-
   testPhases('full app', phases, {
     'a|web/index.html': '''
         <!DOCTYPE html>

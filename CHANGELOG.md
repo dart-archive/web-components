@@ -1,3 +1,7 @@
+#### 0.12.2
+  * Update to JS version
+    [0.7.20](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.20).
+
 #### 0.12.1
   * Update analyzer to `^0.27.0` and update to the test package.
 

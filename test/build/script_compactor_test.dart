@@ -238,6 +238,20 @@ void basicTests() {
     'https://www.dartlang.org/tools/pub/pubspec.html#name.'
   ], StringFormatter.noNewlinesOrSurroundingWhitespace);
 
+  testPhases('package names with double periods are not allowed', phases, {
+    'a..b|web/a.html': '''
+        <!DOCTYPE html><html><head></head><body>
+          <script type="application/dart" src="a.dart"></script>
+        </body></html>''',
+    'a..b|web/a.dart': '''
+        library a.a;
+        main(){}''',
+  }, {}, [
+    'error: Invalid package name `a..b`. Package names should be '
+    'valid dart identifiers, as indicated at '
+    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
   testPhases('package names with internal periods are allowed', phases, {
     'a.b|web/a.html': '''
         <!DOCTYPE html><html><head></head><body>

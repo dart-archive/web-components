@@ -1,3 +1,6 @@
+#### 0.12.2+1
+  * Allow periods in package names (but can't end or begin with one).
+
 #### 0.12.2
   * Update to JS version
     [0.7.20](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.20).

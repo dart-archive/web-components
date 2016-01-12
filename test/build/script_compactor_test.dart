@@ -209,6 +209,51 @@ void basicTests() {
     'valid dart identifiers, as indicated at '
     'https://www.dartlang.org/tools/pub/pubspec.html#name.'
   ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('package names that start with a period are not allowed', phases, {
+    '.a|web/a.html': '''
+        <!DOCTYPE html><html><head></head><body>
+          <script type="application/dart" src="a.dart"></script>
+        </body></html>''',
+    '.a|web/a.dart': '''
+        library a.a;
+        main(){}''',
+  }, {}, [
+    'error: Invalid package name `.a`. Package names should be '
+    'valid dart identifiers, as indicated at '
+    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('package names that end with a period are not allowed', phases, {
+    'a.|web/a.html': '''
+        <!DOCTYPE html><html><head></head><body>
+          <script type="application/dart" src="a.dart"></script>
+        </body></html>''',
+    'a.|web/a.dart': '''
+        library a.a;
+        main(){}''',
+  }, {}, [
+    'error: Invalid package name `a.`. Package names should be '
+    'valid dart identifiers, as indicated at '
+    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+
+  testPhases('package names with internal periods are allowed', phases, {
+    'a.b|web/a.html': '''
+        <!DOCTYPE html><html><head></head><body>
+          <script type="application/dart" src="a.dart"></script>
+        </body></html>''',
+    'a.b|web/a.dart': '''
+        library a.b.a;
+        main(){}''',
+  }, {
+    'a.b|web/a.bootstrap.dart': '''
+      library a.b.web.a_bootstrap_dart;
+
+      import 'a.dart' as i0;
+
+      main() => i0.main();''',
+  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void codeExtractorTests() {

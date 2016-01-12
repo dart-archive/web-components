@@ -229,7 +229,7 @@ class ScriptCompactor {
 
 /// Generate a library name for an asset.
 String _libraryNameFor(AssetId id, BuildLogger logger, [int suffix]) {
-  if (id.package.contains(_invalidLibCharsRegex)) {
+  if (_isInvalidPackageName(id.package)) {
     logger.error('Invalid package name `${id.package}`. Package names should '
         'be valid dart identifiers, as indicated at '
         'https://www.dartlang.org/tools/pub/pubspec.html#name.');
@@ -260,6 +260,12 @@ String _importPath(AssetId id, AssetId primaryInput) {
     return 'package:${path.url.joinAll(parts)}';
   }
   return path.url.relative(id.path, from: path.url.dirname(primaryInput.path));
+}
+
+bool _isInvalidPackageName(String name) {
+  return name.split('.').any((part) {
+    return part.isEmpty || part.contains(_invalidLibCharsRegex);
+  });
 }
 
 // Constant and final variables

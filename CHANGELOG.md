@@ -1,3 +1,7 @@
+#### 0.12.2+2
+
+* Add support for code_transformers `0.4.x`.
+
 #### 0.12.2+1
   * Allow periods in package names (but can't end or begin with one).
 

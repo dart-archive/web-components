@@ -4,7 +4,7 @@
 @TestOn('vm')
 library web_components.test.build.script_compactor_test;
 
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:web_components/build/messages.dart';
 import 'package:web_components/build/script_compactor.dart';
 import 'package:test/test.dart';

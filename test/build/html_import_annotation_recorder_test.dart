@@ -4,7 +4,7 @@
 @TestOn('vm')
 library web_components.test.build.html_import_annotation_recorder_test;
 
-import 'package:code_transformers/tests.dart' hide testPhases;
+import 'package:transformer_test/utils.dart' hide testPhases;
 import 'package:web_components/build/html_import_annotation_recorder.dart';
 import 'package:initialize/transformer.dart';
 import 'package:test/test.dart';

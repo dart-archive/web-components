@@ -4,7 +4,7 @@
 @TestOn('vm')
 library web_components.test.build.import_inliner_test;
 
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:web_components/build/import_inliner.dart';
 import 'package:web_components/build/messages.dart';
 import 'package:test/test.dart';

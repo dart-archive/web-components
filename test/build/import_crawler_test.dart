@@ -6,7 +6,7 @@ library web_components.test.build.import_crawler_test;
 
 import 'dart:async';
 import 'package:barback/barback.dart';
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:code_transformers/messages/build_logger.dart';
 import 'package:html/dom.dart' show Document;
 import 'package:web_components/build/common.dart';

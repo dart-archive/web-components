@@ -4,7 +4,7 @@
 @TestOn('vm')
 library web_components.test.build.test_compatibility_test;
 
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:web_components/build/test_compatibility.dart';
 import 'package:test/test.dart';
 

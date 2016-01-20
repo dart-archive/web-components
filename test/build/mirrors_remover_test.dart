@@ -4,7 +4,7 @@
 @TestOn('vm')
 library web_components.test.build.mirrors_remover_test;
 
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:web_components/build/mirrors_remover.dart';
 import 'package:test/test.dart';
 

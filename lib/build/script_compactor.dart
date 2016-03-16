@@ -133,7 +133,6 @@ class ScriptCompactor {
   Future _extractInlineScripts(AssetId asset, dom.Document doc) {
     var scripts = doc.querySelectorAll('script[type="$dartType"]');
     return Future.forEach(scripts, (script) {
-      var type = script.attributes['type'];
       var src = script.attributes['src'];
 
       if (src != null) {
@@ -174,7 +173,6 @@ class ScriptCompactor {
     var unit = parseDirectives(code, suppressErrors: true);
     var file = new SourceFile(code, url: spanUrlFor(from, to, logger));
     var output = new TextEditTransaction(code, file);
-    var foundLibraryDirective = false;
     for (Directive directive in unit.directives) {
       if (directive is UriBasedDirective) {
         var uri = directive.uri.stringValue;
@@ -188,8 +186,6 @@ class ScriptCompactor {
         if (newUri != uri) {
           output.edit(span.start.offset, span.end.offset, "'$newUri'");
         }
-      } else if (directive is LibraryDirective) {
-        foundLibraryDirective = true;
       }
     }
 

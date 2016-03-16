@@ -176,9 +176,6 @@ class _UrlNormalizer extends TreeVisitor {
   /// Asset where the original content (and original url) was found.
   final AssetId sourceId;
 
-  /// Counter used to ensure that every library name we inject is unique.
-  int _count = 0;
-
   /// Path to the top level folder relative to the transform primaryInput.
   /// This should just be some arbitrary # of ../'s.
   final String topLevelPath;

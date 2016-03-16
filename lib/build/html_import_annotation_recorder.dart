@@ -3,10 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 library web_components.build.html_import_recorder_inliner;
 
-import 'package:analyzer/analyzer.dart';
-import 'package:analyzer/src/generated/ast.dart';
 import 'package:analyzer/src/generated/element.dart';
-import 'package:barback/barback.dart';
 import 'package:initialize/transformer.dart';
 import 'package:path/path.dart' as path;
 import '../src/normalize_path.dart';
@@ -20,8 +17,6 @@ import '../src/normalize_path.dart';
 class HtmlImportAnnotationRecorder implements InitializerPlugin {
   /// All the normalized import paths that were seen.
   final Set<String> importPaths = new Set<String>();
-
-  TransformLogger _logger;
 
   HtmlImportAnnotationRecorder();
 
@@ -63,8 +58,6 @@ class HtmlImportAnnotationRecorder implements InitializerPlugin {
     var annotationElement = pluginData.initializer.annotationElement;
     var element = pluginData.initializer.targetElement as LibraryElement;
     var resolver = pluginData.resolver;
-    var libraryDirective =
-        pluginData.initializer.targetNode.parent.parent as LibraryDirective;
 
     var originalImportPath;
     if (annotationElement.element is PropertyAccessorElement) {

@@ -5,7 +5,6 @@
 library template_wrappers_test;
 
 import 'dart:html';
-import 'dart:async';
 import 'dart:js' show context, JsObject;
 import 'package:test/test.dart';
 import 'package:web_components/interop.dart';
@@ -42,13 +41,13 @@ main() {
     onlyUpgradeNewElements();
     registerDartType('x-d', XDWrapper); // late on purpose.
 
-    a = document.querySelector('x-a');
+    a = document.querySelector('x-a') as XAWrapper;
     expect(a is HtmlElement, isTrue, reason: 'x-a is HtmlElement');
     expect(a is XAWrapper, isTrue, reason: 'x-a is upgraded to XAWrapper');
     expect(a.x, 0);
     expect(a.wrapperCount, 0);
 
-    b = document.querySelector('[is=x-b]');
+    b = document.querySelector('[is=x-b]') as XBWrapper;
     expect(b is DivElement, isTrue, reason: 'x-b is DivElement');
     expect(b is XBWrapper, isTrue, reason: 'x-b is upgraded to XBWrapper');
     expect(b.x, 1);
@@ -75,7 +74,7 @@ main() {
     expect(a is HtmlElement, isTrue, reason: 'x-a is HtmlElement');
     expect(a is XAWrapper, isTrue, reason: 'x-a is upgraded to XAWrapper');
     expect(a.x, 3);
-    expect(a.wrapperCount, 2);
+    expect((a as XAWrapper).wrapperCount, 2);
 
     context.callMethod('addB');
     list = document.querySelectorAll('[is=x-b]');
@@ -84,7 +83,7 @@ main() {
     expect(b is DivElement, isTrue, reason: 'x-b is DivElement');
     expect(b is XBWrapper, isTrue, reason: 'x-b is upgraded to XBWrapper');
     expect(b.x, 4);
-    expect(b.wrapperCount, 3);
+    expect((b as XBWrapper).wrapperCount, 3);
 
     // New instances of x-d should be upgraded regardless.
     context.callMethod('addD');
@@ -94,7 +93,7 @@ main() {
     expect(d is HtmlElement, isTrue, reason: 'x-d is HtmlElement');
     expect(d is XDWrapper, isTrue, reason: 'x-d is upgraded to XDWrapper');
     expect(d.x, 5);
-    expect(d.wrapperCount, 4);
+    expect((d as XDWrapper).wrapperCount, 4);
   }, skip: 'https://github.com/dart-lang/web-components/issues/38');
 
   test('events seen if Dart type is registered before registerElement', () {
@@ -106,7 +105,7 @@ main() {
     c = document.querySelector('x-c');
     expect(c is XCWrapper, isTrue);
     expect(c.x, 6);
-    expect(c.wrapperCount, 5);
+    expect((c as XCWrapper).wrapperCount, 5);
 
     context.callMethod('addC');
     var list = document.querySelectorAll('x-c');
@@ -116,7 +115,7 @@ main() {
     expect(c is HtmlElement, isTrue, reason: 'x-c is HtmlElement');
     expect(c is XCWrapper, isTrue, reason: 'x-c is upgraded to XCWrapper');
     expect(c.x, 7);
-    expect(c.wrapperCount, 6);
+    expect((c as XCWrapper).wrapperCount, 6);
   }, skip: 'https://github.com/dart-lang/web-components/issues/38');
 
   test('element can extend another element', () {

@@ -31,7 +31,7 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('can rewrite script tags to x-dart-test link tags', [[end]], {
     'a|test/index.html': '''
@@ -52,7 +52,7 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('restores original application at the end', [[start], [end]], {
     'a|test/index.html': '''
@@ -72,5 +72,5 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }

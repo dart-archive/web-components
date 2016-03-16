@@ -26,7 +26,7 @@ void importTests() {
   }, {
     'a|web/index.html': '''
         <!DOCTYPE html><html><head></head><body></body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('one import, removes dart script', phases, {
     'a|web/index.html': '''
@@ -50,7 +50,7 @@ void importTests() {
             </div>
           </body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('preserves order of scripts', phases, {
     'a|web/index.html': '''
@@ -76,7 +76,7 @@ void importTests() {
         <script>/*forth*/</script>
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('preserves order of scripts, extract Dart scripts', phases, {
     'a|web/index.html': '''
@@ -128,7 +128,7 @@ void importTests() {
             <polymer-element>2</polymer-element>
           </body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('no transformation outside web/', phases, {
     'a|lib/test.html': '''
@@ -146,7 +146,7 @@ void importTests() {
     'a|lib/test2.html': '''
         <!DOCTYPE html><html><head>
         </head><body><polymer-element>2</polymer-element></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('shallow, elements, many', phases, {
     'a|web/test.html': '''
@@ -175,7 +175,7 @@ void importTests() {
     'a|web/test3.html': '''
         <!DOCTYPE html><html><head>
         </head><body><polymer-element>3</polymer-element></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('deep, elements, one per file', phases, {
     'a|web/test.html': '''
@@ -219,7 +219,7 @@ void importTests() {
     'c|lib/test4.html': '''
         <!DOCTYPE html><html><head>
         </head><body><polymer-element>4</polymer-element></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('deep, elements, many imports', phases, {
     'a|web/test.html': '''
@@ -300,7 +300,7 @@ void importTests() {
         </head><body>
         <polymer-element>4b</polymer-element>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports cycle, 1-step lasso', phases, {
     'a|web/test.html': '''
@@ -338,7 +338,7 @@ void importTests() {
         <polymer-element>1</polymer-element>
         </div>
         <polymer-element>2</polymer-element></body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports cycle, 1-step lasso, scripts too', phases, {
     'a|web/test.html': '''
@@ -384,7 +384,7 @@ void importTests() {
         </div>
         <polymer-element>2</polymer-element>
         <script src="s2"></script></body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports cycle, 1-step lasso, Dart scripts too', phases, {
     'a|web/test.html': '''
@@ -434,7 +434,7 @@ void importTests() {
         <script type="application/dart" src="s2.dart"></script>
         </polymer-element>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports with Dart script after JS script', phases, {
     'a|web/test.html': '''
@@ -473,7 +473,7 @@ void importTests() {
         <script type="application/dart" src="s1.dart"></script>
         </polymer-element>
         'FOO'</body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports cycle, 2-step lasso', phases, {
     'a|web/test.html': '''
@@ -526,7 +526,7 @@ void importTests() {
         <polymer-element>1</polymer-element>
         </div>
         <polymer-element>3</polymer-element></body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports cycle, self cycle', phases, {
     'a|web/test.html': '''
@@ -549,7 +549,7 @@ void importTests() {
         <!DOCTYPE html><html><head>
         </head><body>
         <polymer-element>1</polymer-element></body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports DAG', phases, {
     'a|web/test.html': '''
@@ -596,19 +596,19 @@ void importTests() {
         <!DOCTYPE html><html><head>
         </head><body>
         <polymer-element>3</polymer-element></body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('missing html imports throw errors', phases, {
     'a|web/test.html': '''
         <!DOCTYPE html><html><head>
         <link rel="import" href="foo.html">
         </head></html>''',
-  }, {}, [
+  }, {}, messages: [
     'warning: ${inlineImportFail.create({
           'error': 'Could not find asset a|web/foo.html.'
       }).snippet} '
         '(web/test.html 1 8)',
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('absolute uri', phases, {
     'a|web/test.html': '''
@@ -628,7 +628,7 @@ void importTests() {
         <!DOCTYPE html><html><head>
         <link rel="stylesheet" href="http:example.com/bar.css">
         </head></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void urlAttributeTests() {
@@ -654,7 +654,7 @@ void urlAttributeTests() {
         <script src="baz.jpg"></script>''',
     'a|web/foo/test_2.html': '''
         <foo-element src="baz.jpg"></foo-element>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('paths with an invalid prefix are not normalized', phases, {
     'a|web/test.html': '''
@@ -670,7 +670,7 @@ void urlAttributeTests() {
         <img src="[[bar]]">
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('relative paths followed by invalid characters are normalized',
       phases, {
@@ -689,7 +689,7 @@ void urlAttributeTests() {
         <img src="foo/{{bar}}">
         </div>
         </body></html>''',
-  }, null, StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('relative paths in _* attributes are normalized', phases, {
     'a|web/test.html': '''
@@ -707,7 +707,7 @@ void urlAttributeTests() {
         <a _href="foo/{{bar}}">test</a>
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('paths starting with a binding are treated as absolute', phases, {
     'a|web/test.html': '''
@@ -725,7 +725,7 @@ void urlAttributeTests() {
           <img _src="[[bar]]">
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('arbitrary bindings can exist in paths', phases, {
     'a|web/test.html': '''
@@ -739,7 +739,7 @@ void urlAttributeTests() {
         <img src="{{(bar[2] + baz[\'foo\']) * 14 / foobar() - 0.5}}.jpg">
         <img src="[[bar[2]]].jpg">
         </body></html>''',
-  }, null, StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('multiple bindings can exist in paths', phases, {
     'a|web/test.html': '''
@@ -751,7 +751,7 @@ void urlAttributeTests() {
         <!DOCTYPE html><html><head></head><body>
         <img src="{{bar[0]}}/{{baz[1]}}.{{extension}}">
         </body></html>''',
-  }, null, StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('relative paths in deep imports', phases, {
     'a|web/test.html': '''
@@ -773,7 +773,7 @@ void urlAttributeTests() {
           <style rel="stylesheet" href="css/zap.css"></style>
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void entryPointTests() {
@@ -794,7 +794,7 @@ void entryPointTests() {
         <script rel="import" href="../packages/b/bar/bar.js"></script>
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('includes in entry points normalize correctly', phases, {
     'a|web/test/test.html': '''
@@ -809,7 +809,7 @@ void entryPointTests() {
         <script src="../packages/a/foo/bar.js"></script>
         </head><body>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('two level deep entry points normalize correctly', phases, {
     'a|web/test/well/test.html': '''
@@ -827,7 +827,7 @@ void entryPointTests() {
         <script rel="import" href="../../packages/b/bar/bar.js"></script>
         </div>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 // void templateTests() {
@@ -887,5 +887,5 @@ void entryPointTests() {
 //             </dom-module>
 //           </body>
 //         </html>''',
-//   }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+//   }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 // }

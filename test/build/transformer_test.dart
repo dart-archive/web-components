@@ -116,7 +116,7 @@ main() {
         @initMethod
         bar() {}
         ''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('imports go above the dart script', phases, {
     'b|web/index.html': '''
@@ -170,7 +170,7 @@ main() {
           </body>
         </html>
         ''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('test compatibility', phases, {
     'a|test/index.html': '''
@@ -201,5 +201,5 @@ main() {
           <body></body>
         </html>
         ''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }

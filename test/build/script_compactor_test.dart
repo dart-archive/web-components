@@ -42,7 +42,7 @@ void basicTests() {
     'a|web/index.dart': '''
         library a.index;
         main(){}''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('multiple scripts from nested html import', phases, {
     'a|web/index.html': '''
@@ -88,7 +88,7 @@ void basicTests() {
         <link rel="import" href="b/b.html">
         <link rel="import" href="../../packages/c/c.html">
         <script type="application/dart" src="a.dart"></script>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('inline scripts', phases, {
     'a|web/index.html': '''
@@ -135,7 +135,7 @@ void basicTests() {
         import 'index.html.1.dart' as i1;
 
         main() => i1.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('Cleans library names generated from file paths.', phases, {
     'a|web/01_test.html': '''
@@ -170,7 +170,7 @@ void basicTests() {
         'library a.web._test__foo_04__html_0;\n/*4*/',
     // Replace invalid character followed by number.
     'a|web/%05_test.html.0.dart': 'library a.web._05_test_html_0;\n/*5*/',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('file names with hyphens are ok', phases, {
     'a|web/a-b.html': '''
@@ -194,7 +194,7 @@ void basicTests() {
     'a|web/a-b.dart': '''
         library a.a_b;
         main(){}''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('package names with hyphens give an error', phases, {
     'a-b|web/a.html': '''
@@ -204,11 +204,11 @@ void basicTests() {
     'a-b|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
+  }, {}, messages: [
     'error: Invalid package name `a-b`. Package names should be '
     'valid dart identifiers, as indicated at '
     'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('package names that start with a period are not allowed', phases, {
     '.a|web/a.html': '''
@@ -218,11 +218,11 @@ void basicTests() {
     '.a|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
+  }, {}, messages: [
     'error: Invalid package name `.a`. Package names should be '
     'valid dart identifiers, as indicated at '
     'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('package names that end with a period are not allowed', phases, {
     'a.|web/a.html': '''
@@ -232,11 +232,11 @@ void basicTests() {
     'a.|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
+  }, {}, messages: [
     'error: Invalid package name `a.`. Package names should be '
     'valid dart identifiers, as indicated at '
     'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('package names with double periods are not allowed', phases, {
     'a..b|web/a.html': '''
@@ -246,11 +246,11 @@ void basicTests() {
     'a..b|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
+  }, {}, messages: [
     'error: Invalid package name `a..b`. Package names should be '
     'valid dart identifiers, as indicated at '
     'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('package names with internal periods are allowed', phases, {
     'a.b|web/a.html': '''
@@ -267,16 +267,16 @@ void basicTests() {
       import 'a.dart' as i0;
 
       main() => i0.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void codeExtractorTests() {
   testPhases('no dart script', phases, {
     'a|web/test.html': '<!DOCTYPE html><html></html>',
-  }, {}, [
+  }, {}, messages: [
     'error: Found either zero or multiple dart scripts in the entry point '
         '`web/test.html`. Exactly one was expected.',
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('single script, no library in script', phases, {
     'a|web/test.html': '''
@@ -297,7 +297,7 @@ void codeExtractorTests() {
         import 'test.html.0.dart' as i0;
 
         main() => i0.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('single script, with library', phases, {
     'a|web/test.html': '''
@@ -321,7 +321,7 @@ void codeExtractorTests() {
         import 'test.html.0.dart' as i0;
 
         main() => i0.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('under lib/ directory not transformed', phases, {
     'a|lib/test.html': '''
@@ -337,7 +337,7 @@ void codeExtractorTests() {
           library f;
           main() { }
         </script>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('multiple scripts - error', phases, {
     'a|web/test.html': '''
@@ -347,10 +347,10 @@ void codeExtractorTests() {
             main1() { }
         </script>
         <script type="application/dart">library a2;\nmain2() { }</script>''',
-  }, {}, [
+  }, {}, messages: [
     'error: Found either zero or multiple dart scripts in the entry point '
         '`web/test.html`. Exactly one was expected.',
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  ], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('multiple imported scripts', phases, {
     'a|web/test.html': '''
@@ -396,7 +396,7 @@ void codeExtractorTests() {
     'a|web/test.html.3.dart': '''
         library a.web.test_html_3;
         main4() { }''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 dartUriTests() {
@@ -441,7 +441,7 @@ dartUriTests() {
         import 'foo.dart';
         export 'bar.dart';
         part 'baz.dart';''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('from lib folder', phases, {
     'a|web/test.html': '''
@@ -481,7 +481,7 @@ dartUriTests() {
           part 'baz.dart';
         </script>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
   testPhases('from another pkg', phases, {
     'a|web/test.html': '''
@@ -512,7 +512,7 @@ dartUriTests() {
         import 'package:b/test2/foo.dart';
         export 'package:b/test2/bar.dart';
         part 'package:b/test2/baz.dart';''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  }, messages: [], formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 validateUriTests() {
@@ -521,7 +521,7 @@ validateUriTests() {
         <!DOCTYPE html><html><body>
         <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-  }, {}, [
+  }, {}, messages: [
     'warning: ${scriptFileNotFound.create({'url': 'a|web/a.dart'}).snippet} '
         '(web/test.html 1 8)',
   ]);

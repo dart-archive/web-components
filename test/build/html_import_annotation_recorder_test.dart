@@ -18,7 +18,9 @@ testPhases(String name, Map<String, String> inputs,
 
   test(name, () {
     // Run the transformer and test the output.
-    return applyTransformers([[transformer]],
+    return applyTransformers([
+      [transformer]
+    ],
         inputs: inputs,
         results: expected,
         formatter: StringFormatter.noNewlinesOrSurroundingWhitespace).then((_) {

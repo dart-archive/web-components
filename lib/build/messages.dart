@@ -8,8 +8,10 @@ library web_components.build.messages;
 import 'package:code_transformers/messages/messages.dart';
 
 const scriptFileNotFound = const MessageTemplate(
-    const MessageId('web_components', 0), 'Script file at "%-url-%" not found.',
-    'URL to a script file might be incorrect', '''
+    const MessageId('web_components', 0),
+    'Script file at "%-url-%" not found.',
+    'URL to a script file might be incorrect',
+    '''
 An error occurred trying to read a script tag on a given URL. This is often the
 result of a broken URL in a `<script src="...">`.
 ''');
@@ -17,7 +19,8 @@ result of a broken URL in a `<script src="...">`.
 const scriptIncludedMoreThanOnce = const MessageTemplate(
     const MessageId('web_components', 1),
     'The `%-url-%` script was included more than once.',
-    'Dart script file included more than once.', '''
+    'Dart script file included more than once.',
+    '''
 Duplicate dart scripts often happen if you have multiple html imports that
 include the same script. The simplest workaround for this is to move your dart
 script to its own html file, and import that instead of the script (html imports
@@ -46,7 +49,8 @@ const exactlyOneScriptPerEntryPoint = const MessageTemplate(
 const internalErrorDontKnowHowToImport = const MessageTemplate(
     const MessageId('web_components', 3),
     "internal error: don't know how to include %-target-% from"
-    " %-source-%.%-extra-%", "Internal error: don't know how to include a URL",
+    " %-source-%.%-extra-%",
+    "Internal error: don't know how to include a URL",
     '''
 Sorry, you just ran into a bug in the web_components transformer code. Please
 file a bug at <https://github.com/dart-lang/web-components/issues/new>
@@ -56,7 +60,8 @@ issue.
 
 const inlineImportFail = const MessageTemplate(
     const MessageId('web_components', 4),
-    'Failed to inline HTML import: %-error-%', 'Error while inlining an import',
+    'Failed to inline HTML import: %-error-%',
+    'Error while inlining an import',
     '''
 An error occurred while inlining an import in the web_components build. This is
 often the result of a broken HTML import.

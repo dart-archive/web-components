@@ -18,7 +18,9 @@ export 'mirror_initializer.dart' show deployMode;
 ///
 /// If a [typeFilter] or [customFilter] are supplied, only one phase is ran
 /// with the supplied filters.
-Future initWebComponents({List<Type> typeFilter, InitializerFilter customFilter,
+Future initWebComponents(
+    {List<Type> typeFilter,
+    InitializerFilter customFilter,
     bool initAll: true}) {
   if (typeFilter != null || customFilter != null) {
     return init.run(typeFilter: typeFilter, customFilter: customFilter);

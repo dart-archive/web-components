@@ -129,6 +129,7 @@ main() {
     expect(e.y, 9);
   }, skip: 'https://github.com/dart-lang/web-components/issues/38');
 }
+
 int _count = 0;
 
 abstract class Wrapper {

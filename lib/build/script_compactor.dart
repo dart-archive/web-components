@@ -162,8 +162,8 @@ class ScriptCompactor {
         // the new source file.
         if (primaryInput == asset) {
           script.text = '';
-          script.attributes['src'] = path.url.relative(newId.path,
-              from: path.url.dirname(primaryInput.path));
+          script.attributes['src'] = path.url
+              .relative(newId.path, from: path.url.dirname(primaryInput.path));
         }
       });
     });
@@ -249,7 +249,8 @@ String _libraryNameFor(AssetId id, BuildLogger logger, [int suffix]) {
 
 /// Parse [code] and determine whether it has a library directive.
 bool _hasLibraryDirective(String code) =>
-    parseDirectives(code, suppressErrors: true).directives
+    parseDirectives(code, suppressErrors: true)
+        .directives
         .any((d) => d is LibraryDirective);
 
 /// Returns the dart import path to reach [id] relative to [primaryInput].

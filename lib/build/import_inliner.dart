@@ -38,7 +38,8 @@ class ImportInlinerTransformer extends Transformer {
   apply(Transform transform) {
     var logger = new BuildLogger(transform, convertErrorsToWarnings: true);
     return new ImportInliner(transform, transform.primaryInput.id, logger,
-        bindingStartDelimiters: bindingStartDelimiters).run();
+            bindingStartDelimiters: bindingStartDelimiters)
+        .run();
   }
 }
 
@@ -71,8 +72,10 @@ class ImportInliner {
       if (imports.length > 1) {
         _inlineImports(primaryDocument, imports);
       } else if (!changed &&
-          primaryDocument.querySelectorAll('link[rel="import"]').where(
-                  (import) => import.attributes['type'] != 'css').length ==
+          primaryDocument
+                  .querySelectorAll('link[rel="import"]')
+                  .where((import) => import.attributes['type'] != 'css')
+                  .length ==
               0) {
         // If there were no url changes and no imports, then we are done.
         return;
@@ -303,7 +306,8 @@ class _UrlNormalizer extends TreeVisitor {
 
     if (primaryInput.package != id.package) {
       // Technically we shouldn't get there
-      logger.error(internalErrorDontKnowHowToImport
+      logger.error(
+          internalErrorDontKnowHowToImport
               .create({'target': id, 'source': primaryInput, 'extra': ''}),
           span: span);
       return href;

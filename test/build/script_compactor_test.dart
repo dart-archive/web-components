@@ -10,7 +10,9 @@ import 'package:web_components/build/script_compactor.dart';
 import 'package:test/test.dart';
 
 var transformer = new ScriptCompactorTransformer();
-var phases = [[transformer]];
+var phases = [
+  [transformer]
+];
 
 main() {
   group('basic', basicTests);
@@ -20,32 +22,41 @@ main() {
 }
 
 void basicTests() {
-  testPhases('single script', phases, {
-    'a|web/index.html': '''
+  testPhases(
+      'single script',
+      phases,
+      {
+        'a|web/index.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="index.dart"></script>
         </body></html>''',
-    'a|web/index.dart': '''
+        'a|web/index.dart': '''
         library a.index;
         main(){}''',
-  }, {
-    'a|web/index.html': '''
+      },
+      {
+        'a|web/index.html': '''
         <!DOCTYPE html><html><head></head><body>
         <script type="application/dart" src="index.bootstrap.dart"></script>
         </body></html>''',
-    'a|web/index.bootstrap.dart': '''
+        'a|web/index.bootstrap.dart': '''
         library a.web.index_bootstrap_dart;
 
         import 'index.dart' as i0;
 
         main() => i0.main();''',
-    'a|web/index.dart': '''
+        'a|web/index.dart': '''
         library a.index;
         main(){}''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('multiple scripts from nested html import', phases, {
-    'a|web/index.html': '''
+  testPhases(
+      'multiple scripts from nested html import',
+      phases,
+      {
+        'a|web/index.html': '''
         <!DOCTYPE html><html>
           <head>
             <link rel="import" href="packages/b/a.html">
@@ -54,20 +65,23 @@ void basicTests() {
             <script type="application/dart" src="index.dart"></script>
           </body>
         </body></html>''',
-    'a|web/index.dart': '''
+        'a|web/index.dart': '''
         library a.index;
         main(){}''',
-    'b|lib/a.html': '''
+        'b|lib/a.html': '''
         <link rel="import" href="b/b.html">
         <link rel="import" href="../../packages/c/c.html">
         <script type="application/dart" src="a.dart"></script>''',
-    'b|lib/b/b.html': '<script type="application/dart" src="b.dart"></script>',
-    'b|lib/a.dart': 'library b.a;',
-    'b|lib/b/b.dart': 'library b.b.b;',
-    'c|lib/c.html': '<script type="application/dart" src="c.dart"></script>',
-    'c|lib/c.dart': 'library c.c;',
-  }, {
-    'a|web/index.html': '''
+        'b|lib/b/b.html':
+            '<script type="application/dart" src="b.dart"></script>',
+        'b|lib/a.dart': 'library b.a;',
+        'b|lib/b/b.dart': 'library b.b.b;',
+        'c|lib/c.html':
+            '<script type="application/dart" src="c.dart"></script>',
+        'c|lib/c.dart': 'library c.c;',
+      },
+      {
+        'a|web/index.html': '''
         <!DOCTYPE html><html>
         <head>
           <link rel="import" href="packages/b/a.html">
@@ -75,7 +89,7 @@ void basicTests() {
         <body>
           <script type="application/dart" src="index.bootstrap.dart"></script>
         </body></html>''',
-    'a|web/index.bootstrap.dart': '''
+        'a|web/index.bootstrap.dart': '''
         library a.web.index_bootstrap_dart;
 
         import 'package:b/b/b.dart' as i0;
@@ -84,14 +98,19 @@ void basicTests() {
         import 'index.dart' as i3;
 
         main() => i3.main();''',
-    'b|lib/a.html': '''
+        'b|lib/a.html': '''
         <link rel="import" href="b/b.html">
         <link rel="import" href="../../packages/c/c.html">
         <script type="application/dart" src="a.dart"></script>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('inline scripts', phases, {
-    'a|web/index.html': '''
+  testPhases(
+      'inline scripts',
+      phases,
+      {
+        'a|web/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -104,14 +123,15 @@ void basicTests() {
             </script>
           </body>
         </html>''',
-    'a|lib/foo.html': '''
+        'a|lib/foo.html': '''
         <script type="application/dart">
           library a.foo;
 
           import 'bar.dart';
         </script>''',
-  }, {
-    'a|web/index.html': '''
+      },
+      {
+        'a|web/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -121,251 +141,325 @@ void basicTests() {
             <script type="application/dart" src="index.bootstrap.dart"></script>
           </body>
         </html>''',
-    'a|web/index.html.1.dart': '''
+        'a|web/index.html.1.dart': '''
         library a.index;
         main(){}''',
-    'a|web/index.html.0.dart': '''
+        'a|web/index.html.0.dart': '''
         library a.foo;
 
         import 'package:a/bar.dart';''',
-    'a|web/index.bootstrap.dart': '''
+        'a|web/index.bootstrap.dart': '''
         library a.web.index_bootstrap_dart;
 
         import 'index.html.0.dart' as i0;
         import 'index.html.1.dart' as i1;
 
         main() => i1.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('Cleans library names generated from file paths.', phases, {
-    'a|web/01_test.html': '''
+  testPhases(
+      'Cleans library names generated from file paths.',
+      phases,
+      {
+        'a|web/01_test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">/*1*/</script>
         </head></html>''',
-    'a|web/foo_02_test.html': '''
+        'a|web/foo_02_test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">/*2*/</script>
         </head></html>''',
-    'a|web/test_03.html': '''
+        'a|web/test_03.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">/*3*/</script>
         </head></html>''',
-    'a|web/*test_%foo_04!.html': '''
+        'a|web/*test_%foo_04!.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">/*4*/</script>
         </head></html>''',
-    'a|web/%05_test.html': '''
+        'a|web/%05_test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">/*5*/</script>
         </head></html>''',
-  }, {
-    // Appends an _ if it starts with a number.
-    'a|web/01_test.html.0.dart': 'library a.web._01_test_html_0;\n/*1*/',
-    // Allows numbers in the middle.
-    'a|web/foo_02_test.html.0.dart': 'library a.web.foo_02_test_html_0;\n/*2*/',
-    // Allows numbers at the end.
-    'a|web/test_03.html.0.dart': 'library a.web.test_03_html_0;\n/*3*/',
-    // Replaces invalid characters with _.
-    'a|web/*test_%foo_04!.html.0.dart':
-        'library a.web._test__foo_04__html_0;\n/*4*/',
-    // Replace invalid character followed by number.
-    'a|web/%05_test.html.0.dart': 'library a.web._05_test_html_0;\n/*5*/',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      {
+        // Appends an _ if it starts with a number.
+        'a|web/01_test.html.0.dart': 'library a.web._01_test_html_0;\n/*1*/',
+        // Allows numbers in the middle.
+        'a|web/foo_02_test.html.0.dart':
+            'library a.web.foo_02_test_html_0;\n/*2*/',
+        // Allows numbers at the end.
+        'a|web/test_03.html.0.dart': 'library a.web.test_03_html_0;\n/*3*/',
+        // Replaces invalid characters with _.
+        'a|web/*test_%foo_04!.html.0.dart':
+            'library a.web._test__foo_04__html_0;\n/*4*/',
+        // Replace invalid character followed by number.
+        'a|web/%05_test.html.0.dart': 'library a.web._05_test_html_0;\n/*5*/',
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('file names with hyphens are ok', phases, {
-    'a|web/a-b.html': '''
+  testPhases(
+      'file names with hyphens are ok',
+      phases,
+      {
+        'a|web/a-b.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a-b.dart"></script>
         </body></html>''',
-    'a|web/a-b.dart': '''
+        'a|web/a-b.dart': '''
         library a.a_b;
         main(){}''',
-  }, {
-    'a|web/a-b.html': '''
+      },
+      {
+        'a|web/a-b.html': '''
         <!DOCTYPE html><html><head></head><body>
         <script type="application/dart" src="a-b.bootstrap.dart"></script>
         </body></html>''',
-    'a|web/a-b.bootstrap.dart': '''
+        'a|web/a-b.bootstrap.dart': '''
         library a.web.a_b_bootstrap_dart;
 
         import 'a-b.dart' as i0;
 
         main() => i0.main();''',
-    'a|web/a-b.dart': '''
+        'a|web/a-b.dart': '''
         library a.a_b;
         main(){}''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('package names with hyphens give an error', phases, {
-    'a-b|web/a.html': '''
+  testPhases(
+      'package names with hyphens give an error',
+      phases,
+      {
+        'a-b|web/a.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-    'a-b|web/a.dart': '''
+        'a-b|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
-    'error: Invalid package name `a-b`. Package names should be '
-    'valid dart identifiers, as indicated at '
-    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      {},
+      messages: [
+        'error: Invalid package name `a-b`. Package names should be '
+            'valid dart identifiers, as indicated at '
+            'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+      ],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('package names that start with a period are not allowed', phases, {
-    '.a|web/a.html': '''
+  testPhases(
+      'package names that start with a period are not allowed',
+      phases,
+      {
+        '.a|web/a.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-    '.a|web/a.dart': '''
+        '.a|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
-    'error: Invalid package name `.a`. Package names should be '
-    'valid dart identifiers, as indicated at '
-    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      {},
+      messages: [
+        'error: Invalid package name `.a`. Package names should be '
+            'valid dart identifiers, as indicated at '
+            'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+      ],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('package names that end with a period are not allowed', phases, {
-    'a.|web/a.html': '''
+  testPhases(
+      'package names that end with a period are not allowed',
+      phases,
+      {
+        'a.|web/a.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-    'a.|web/a.dart': '''
+        'a.|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
-    'error: Invalid package name `a.`. Package names should be '
-    'valid dart identifiers, as indicated at '
-    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      {},
+      messages: [
+        'error: Invalid package name `a.`. Package names should be '
+            'valid dart identifiers, as indicated at '
+            'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+      ],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('package names with double periods are not allowed', phases, {
-    'a..b|web/a.html': '''
+  testPhases(
+      'package names with double periods are not allowed',
+      phases,
+      {
+        'a..b|web/a.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-    'a..b|web/a.dart': '''
+        'a..b|web/a.dart': '''
         library a.a;
         main(){}''',
-  }, {}, [
-    'error: Invalid package name `a..b`. Package names should be '
-    'valid dart identifiers, as indicated at '
-    'https://www.dartlang.org/tools/pub/pubspec.html#name.'
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      {},
+      messages: [
+        'error: Invalid package name `a..b`. Package names should be '
+            'valid dart identifiers, as indicated at '
+            'https://www.dartlang.org/tools/pub/pubspec.html#name.'
+      ],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('package names with internal periods are allowed', phases, {
-    'a.b|web/a.html': '''
+  testPhases(
+      'package names with internal periods are allowed',
+      phases,
+      {
+        'a.b|web/a.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-    'a.b|web/a.dart': '''
+        'a.b|web/a.dart': '''
         library a.b.a;
         main(){}''',
-  }, {
-    'a.b|web/a.bootstrap.dart': '''
+      },
+      {
+        'a.b|web/a.bootstrap.dart': '''
       library a.b.web.a_bootstrap_dart;
 
       import 'a.dart' as i0;
 
       main() => i0.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 void codeExtractorTests() {
-  testPhases('no dart script', phases, {
-    'a|web/test.html': '<!DOCTYPE html><html></html>',
-  }, {}, [
-    'error: Found either zero or multiple dart scripts in the entry point '
-        '`web/test.html`. Exactly one was expected.',
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+  testPhases('no dart script', phases,
+      {'a|web/test.html': '<!DOCTYPE html><html></html>',}, {},
+      messages: [
+        'error: Found either zero or multiple dart scripts in the entry point '
+            '`web/test.html`. Exactly one was expected.',
+      ],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('single script, no library in script', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'single script, no library in script',
+      phases,
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">main() { }</script>''',
-  }, {
-    'a|web/test.html': '''
+      },
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <script type="application/dart" src="test.bootstrap.dart">
           </script>
         </head><body></body></html>''',
-    'a|web/test.html.0.dart': '''
+        'a|web/test.html.0.dart': '''
         library a.web.test_html_0;
         main() { }''',
-    'a|web/test.bootstrap.dart': '''
+        'a|web/test.bootstrap.dart': '''
         library a.web.test_bootstrap_dart;
 
         import 'test.html.0.dart' as i0;
 
         main() => i0.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('single script, with library', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'single script, with library',
+      phases,
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">
           library f;
           main() { }
         </script>''',
-  }, {
-    'a|web/test.html': '''
+      },
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <script type="application/dart" src="test.bootstrap.dart">
           </script>
         </head><body></body></html>''',
-    'a|web/test.html.0.dart': '''
+        'a|web/test.html.0.dart': '''
         library f;
         main() { }''',
-    'a|web/test.bootstrap.dart': '''
+        'a|web/test.bootstrap.dart': '''
         library a.web.test_bootstrap_dart;
 
         import 'test.html.0.dart' as i0;
 
         main() => i0.main();''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('under lib/ directory not transformed', phases, {
-    'a|lib/test.html': '''
+  testPhases(
+      'under lib/ directory not transformed',
+      phases,
+      {
+        'a|lib/test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">
           library f;
           main() { }
         </script>''',
-  }, {
-    'a|lib/test.html': '''
+      },
+      {
+        'a|lib/test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">
           library f;
           main() { }
         </script>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('multiple scripts - error', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'multiple scripts - error',
+      phases,
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
         <script type="application/dart">
             library a1;
             main1() { }
         </script>
         <script type="application/dart">library a2;\nmain2() { }</script>''',
-  }, {}, [
-    'error: Found either zero or multiple dart scripts in the entry point '
-        '`web/test.html`. Exactly one was expected.',
-  ], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      {},
+      messages: [
+        'error: Found either zero or multiple dart scripts in the entry point '
+            '`web/test.html`. Exactly one was expected.',
+      ],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('multiple imported scripts', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'multiple imported scripts',
+      phases,
+      {
+        'a|web/test.html': '''
         <link rel="import" href="test2.html">
         <link rel="import" href="bar/test.html">
         <link rel="import" href="packages/a/foo/test.html">
         <link rel="import" href="packages/b/test.html">
         <script type="application/dart" src="test.dart"></script>''',
-    'a|web/test.dart': 'library a.test;',
-    'a|web/test2.html': '<script type="application/dart">main1() { }',
-    'a|web/bar/test.html': '<script type="application/dart">main2() { }',
-    'a|lib/foo/test.html': '<script type="application/dart">main3() { }',
-    'b|lib/test.html': '<script type="application/dart">main4() { }',
-  }, {
-    'a|web/test.html': '''
+        'a|web/test.dart': 'library a.test;',
+        'a|web/test2.html': '<script type="application/dart">main1() { }',
+        'a|web/bar/test.html': '<script type="application/dart">main2() { }',
+        'a|lib/foo/test.html': '<script type="application/dart">main3() { }',
+        'b|lib/test.html': '<script type="application/dart">main4() { }',
+      },
+      {
+        'a|web/test.html': '''
         <html>
           <head>
             <link rel="import" href="test2.html">
@@ -374,7 +468,7 @@ void codeExtractorTests() {
             <link rel="import" href="packages/b/test.html">
             <script type="application/dart" src="test.bootstrap.dart"></script>
           </head><body></body></html>''',
-    'a|web/test.bootstrap.dart': '''
+        'a|web/test.bootstrap.dart': '''
         library a.web.test_bootstrap_dart;
         import 'test.html.0.dart' as i0;
         import 'test.html.1.dart' as i1;
@@ -384,30 +478,35 @@ void codeExtractorTests() {
 
         main() => i4.main();
         ''',
-    'a|web/test.html.0.dart': '''
+        'a|web/test.html.0.dart': '''
         library a.web.test_html_0;
         main1() { }''',
-    'a|web/test.html.1.dart': '''
+        'a|web/test.html.1.dart': '''
         library a.web.test_html_1;
         main2() { }''',
-    'a|web/test.html.2.dart': '''
+        'a|web/test.html.2.dart': '''
         library a.web.test_html_2;
         main3() { }''',
-    'a|web/test.html.3.dart': '''
+        'a|web/test.html.3.dart': '''
         library a.web.test_html_3;
         main4() { }''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 dartUriTests() {
-  testPhases('from web folder', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'from web folder',
+      phases,
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <link rel="import" href="test2/foo.html">
           <script type="application/dart" src="test.dart"></script>
         </head><body></body></html>''',
-    'a|web/test.dart': 'library a.test;',
-    'a|web/test2/foo.html': '''
+        'a|web/test.dart': 'library a.test;',
+        'a|web/test2/foo.html': '''
       <!DOCTYPE html><html><head></head><body>
       <script type="application/dart">
         import 'package:qux/qux.dart';
@@ -416,41 +515,47 @@ dartUriTests() {
         part 'baz.dart';
       </script>
       </body></html>''',
-  }, {
-    'a|web/test.html': '''
+      },
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <link rel="import" href="test2/foo.html">
           <script type="application/dart" src="test.bootstrap.dart"></script>
         </head><body></body></html>''',
-    'a|web/test.html.0.dart': '''
+        'a|web/test.html.0.dart': '''
         library a.web.test_html_0;
 
         import 'package:qux/qux.dart';
         import 'test2/foo.dart';
         export 'test2/bar.dart';
         part 'test2/baz.dart';''',
-    'a|web/test2/foo.html': '''
+        'a|web/test2/foo.html': '''
         <!DOCTYPE html><html><head></head><body>
           <script type="application/dart" src="foo.bootstrap.dart">
           </script>
         </body></html>''',
-    'a|web/test2/foo.html.0.dart': '''
+        'a|web/test2/foo.html.0.dart': '''
         library a.web.test2.foo_html_0;
 
         import 'package:qux/qux.dart';
         import 'foo.dart';
         export 'bar.dart';
         part 'baz.dart';''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('from lib folder', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'from lib folder',
+      phases,
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
         <link rel="import" href="packages/a/test2/foo.html">
         <script type="application/dart" src="test.dart"></script>
         </head><body></body></html>''',
-    'a|web/test.dart': 'library a.test;',
-    'a|lib/test2/foo.html': '''
+        'a|web/test.dart': 'library a.test;',
+        'a|lib/test2/foo.html': '''
         <!DOCTYPE html><html><head></head><body>
         <script type="application/dart">
           import 'package:qux/qux.dart';
@@ -459,20 +564,21 @@ dartUriTests() {
           part 'baz.dart';
         </script>
         </body></html>''',
-  }, {
-    'a|web/test.html': '''
+      },
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <link rel="import" href="packages/a/test2/foo.html">
           <script type="application/dart" src="test.bootstrap.dart"></script>
         </head><body></body></html>''',
-    'a|web/test.html.0.dart': '''
+        'a|web/test.html.0.dart': '''
         library a.web.test_html_0;
 
         import 'package:qux/qux.dart';
         import 'package:a/test2/foo.dart';
         export 'package:a/test2/bar.dart';
         part 'package:a/test2/baz.dart';''',
-    'a|lib/test2/foo.html': '''
+        'a|lib/test2/foo.html': '''
         <!DOCTYPE html><html><head></head><body>
         <script type="application/dart">
           import 'package:qux/qux.dart';
@@ -481,16 +587,21 @@ dartUriTests() {
           part 'baz.dart';
         </script>
         </body></html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('from another pkg', phases, {
-    'a|web/test.html': '''
+  testPhases(
+      'from another pkg',
+      phases,
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <link rel="import" href="packages/b/test2/foo.html">
           <script type="application/dart" src="test.dart"></script>
         </head><body></body></html>''',
-    'a|web/test.dart': 'library a.test;',
-    'b|lib/test2/foo.html': '''
+        'a|web/test.dart': 'library a.test;',
+        'b|lib/test2/foo.html': '''
       <!DOCTYPE html><html><head></head><body>
       <script type="application/dart">
       import 'package:qux/qux.dart';
@@ -499,20 +610,23 @@ dartUriTests() {
       part 'baz.dart';
       </script>
       </body></html>''',
-  }, {
-    'a|web/test.html': '''
+      },
+      {
+        'a|web/test.html': '''
         <!DOCTYPE html><html><head>
           <link rel="import" href="packages/b/test2/foo.html">
           <script type="application/dart" src="test.bootstrap.dart"></script>
         </head><body></body></html>''',
-    'a|web/test.html.0.dart': '''
+        'a|web/test.html.0.dart': '''
         library a.web.test_html_0;
 
         import 'package:qux/qux.dart';
         import 'package:b/test2/foo.dart';
         export 'package:b/test2/bar.dart';
         part 'package:b/test2/baz.dart';''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }
 
 validateUriTests() {
@@ -521,7 +635,7 @@ validateUriTests() {
         <!DOCTYPE html><html><body>
         <script type="application/dart" src="a.dart"></script>
         </body></html>''',
-  }, {}, [
+  }, {}, messages: [
     'warning: ${scriptFileNotFound.create({'url': 'a|web/a.dart'}).snippet} '
         '(web/test.html 1 8)',
   ]);

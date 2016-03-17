@@ -10,7 +10,9 @@ import 'package:test/test.dart';
 
 main() {
   var transformer = new MirrorsRemoverTransformer();
-  var phases = [[transformer]];
+  var phases = [
+    [transformer]
+  ];
 
   testPhases('basic', phases, {
     'a|lib/src/init.dart': '''
@@ -30,5 +32,5 @@ main() {
 
         foo() {}
         ''',
-  }, []);
+  }, messages: []);
 }

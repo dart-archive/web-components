@@ -12,8 +12,13 @@ var start = new RewriteXDartTestToScript(null);
 var end = new RewriteScriptToXDartTest(null);
 
 main() {
-  testPhases('can rewrite x-dart-test link tags to script tags', [[start]], {
-    'a|test/index.html': '''
+  testPhases(
+      'can rewrite x-dart-test link tags to script tags',
+      [
+        [start]
+      ],
+      {
+        'a|test/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -21,8 +26,9 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, {
-    'a|test/index.html': '''
+      },
+      {
+        'a|test/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -31,10 +37,17 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('can rewrite script tags to x-dart-test link tags', [[end]], {
-    'a|test/index.html': '''
+  testPhases(
+      'can rewrite script tags to x-dart-test link tags',
+      [
+        [end]
+      ],
+      {
+        'a|test/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -43,8 +56,9 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, {
-    'a|test/index.html': '''
+      },
+      {
+        'a|test/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -52,10 +66,18 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 
-  testPhases('restores original application at the end', [[start], [end]], {
-    'a|test/index.html': '''
+  testPhases(
+      'restores original application at the end',
+      [
+        [start],
+        [end]
+      ],
+      {
+        'a|test/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -63,8 +85,9 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, {
-    'a|test/index.html': '''
+      },
+      {
+        'a|test/index.html': '''
         <!DOCTYPE html>
         <html>
           <head>
@@ -72,5 +95,7 @@ main() {
           </head>
           <body></body>
         </html>''',
-  }, [], StringFormatter.noNewlinesOrSurroundingWhitespace);
+      },
+      messages: [],
+      formatter: StringFormatter.noNewlinesOrSurroundingWhitespace);
 }

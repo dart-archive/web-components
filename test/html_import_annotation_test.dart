@@ -8,10 +8,11 @@ library web_components.test.html_import_annotation;
 import 'dart:html';
 import 'package:test/test.dart';
 import 'package:web_components/web_components.dart';
-import 'foo/bar.dart';
+import 'foo/bar.dart' as foo_bar;
 
 const String importPath = 'my_import.html';
 
+/// Uses [foo_bar].
 main() async {
   await initWebComponents();
 

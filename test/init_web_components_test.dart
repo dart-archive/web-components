@@ -19,9 +19,12 @@ main() {
         const LibraryIdentifier(
             #web_components.test.deps.b, null, 'deps/b.dart'),
         // This one changes based on deploy mode because its an inline script.
-        const LibraryIdentifier(#web_components.test.deps.c, null, deployMode
-            ? 'init_web_components_test.html.0.dart'
-            : 'deps/c.html'),
+        const LibraryIdentifier(
+            #web_components.test.deps.c,
+            null,
+            deployMode
+                ? 'init_web_components_test.html.0.dart'
+                : 'deps/c.html'),
         const LibraryIdentifier(
             #web_components.test.deps.a, null, 'deps/a.dart'),
         const LibraryIdentifier(#web_components.test.init_web_components_test,

@@ -133,7 +133,6 @@ class ScriptCompactor {
   Future _extractInlineScripts(AssetId asset, dom.Document doc) {
     var scripts = doc.querySelectorAll('script[type="$dartType"]');
     return Future.forEach(scripts, (script) {
-      var type = script.attributes['type'];
       var src = script.attributes['src'];
 
       if (src != null) {
@@ -162,8 +161,8 @@ class ScriptCompactor {
         // the new source file.
         if (primaryInput == asset) {
           script.text = '';
-          script.attributes['src'] = path.url.relative(newId.path,
-              from: path.url.dirname(primaryInput.path));
+          script.attributes['src'] = path.url
+              .relative(newId.path, from: path.url.dirname(primaryInput.path));
         }
       });
     });
@@ -174,7 +173,6 @@ class ScriptCompactor {
     var unit = parseDirectives(code, suppressErrors: true);
     var file = new SourceFile(code, url: spanUrlFor(from, to, logger));
     var output = new TextEditTransaction(code, file);
-    var foundLibraryDirective = false;
     for (Directive directive in unit.directives) {
       if (directive is UriBasedDirective) {
         var uri = directive.uri.stringValue;
@@ -188,8 +186,6 @@ class ScriptCompactor {
         if (newUri != uri) {
           output.edit(span.start.offset, span.end.offset, "'$newUri'");
         }
-      } else if (directive is LibraryDirective) {
-        foundLibraryDirective = true;
       }
     }
 
@@ -249,7 +245,8 @@ String _libraryNameFor(AssetId id, BuildLogger logger, [int suffix]) {
 
 /// Parse [code] and determine whether it has a library directive.
 bool _hasLibraryDirective(String code) =>
-    parseDirectives(code, suppressErrors: true).directives
+    parseDirectives(code, suppressErrors: true)
+        .directives
         .any((d) => d is LibraryDirective);
 
 /// Returns the dart import path to reach [id] relative to [primaryInput].

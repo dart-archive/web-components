@@ -38,7 +38,7 @@ bool get _isReady {
   if (customElements == null) {
     // Return true if native document.register, otherwise false.
     // (Maybe the polyfill isn't loaded yet. Wait for it.)
-    return document.supportsRegister;
+    return document.supportsRegisterElement;
   }
 
   return customElements['ready'] == true;

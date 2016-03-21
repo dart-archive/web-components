@@ -1,3 +1,7 @@
+#### 0.12.3
+  * Update to JS version
+    [0.7.21](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.21).
+
 #### 0.12.2+2
 
 * Update to transformer_test `0.2.x`.

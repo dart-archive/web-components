@@ -32,7 +32,7 @@ class ExtendedElement extends InputElement {
 }
 
 main() {
-  initWebComponents().then((_) {
+  return initWebComponents().then((_) {
     var container = querySelector('#container') as DivElement;
 
     setUp(() {

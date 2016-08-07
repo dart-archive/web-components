@@ -68,7 +68,7 @@ class _State {
   final Set<Document> seen = new Set();
 
   /// Scripts that have been discovered, in tree order.
-  final LinkedHashMap<String, _ScriptInfo> scripts = {};
+  final LinkedHashMap<String, _ScriptInfo> scripts = new LinkedHashMap<String,_ScriptInfo>();
 }
 
 /// Holds information about a Dart script tag.

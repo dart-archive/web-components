@@ -81,11 +81,11 @@ class ScriptCompactor {
 
   Future<Asset> run() {
     var crawler = new ImportCrawler(transform, primaryInput, logger);
-    return crawler.crawlImports().then((imports) {
+    return crawler.crawlImports().then((imports) async {
       Future extractScripts(id) =>
           _extractInlineScripts(id, imports[id].document);
 
-      return Future.forEach(imports.keys, extractScripts).then((_) {
+      return await Future.forEach(imports.keys, extractScripts).then((_) async {
         if (mainScript == null) {
           logger.error(
               exactlyOneScriptPerEntryPoint.create({'url': primaryInput.path}));
@@ -96,7 +96,7 @@ class ScriptCompactor {
         assert(primaryDocument != null);
 
         // Create the new bootstrap file and return its AssetId.
-        return _buildBootstrapFile(mainScript, importScripts);
+        return await _buildBootstrapFile(mainScript, importScripts);
       });
     });
   }

@@ -25,7 +25,7 @@ Asset generateWebComponentsBootstrap(Resolver resolver, Transform transform,
     dom.Document document, AssetId scriptId, AssetId newScriptId,
     {List<InitializerPlugin> extraPlugins: const []}) {
   var htmlImportRecorder = new HtmlImportAnnotationRecorder();
-  var plugins = [htmlImportRecorder]..addAll(extraPlugins);
+  var plugins = [htmlImportRecorder as InitializerPlugin]..addAll(extraPlugins);
 
   // Bootstrap the application using the `initialize` package and our
   // plugins.
@@ -39,7 +39,7 @@ Asset generateWebComponentsBootstrap(Resolver resolver, Transform transform,
       document.head.querySelector('script[type="application/dart"]');
   for (var importPath in htmlImportRecorder.importPaths) {
     var import = new dom.Element.tag('link')
-      ..attributes = {'rel': 'import', 'href': importPath,};
+      ..attributes = (new Map<dynamic,String>()..addAll({'rel': 'import', 'href': importPath,}));
     document.head.insertBefore(import, dartScript);
   }
 

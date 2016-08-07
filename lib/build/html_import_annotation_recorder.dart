@@ -4,6 +4,7 @@
 library web_components.build.html_import_recorder_inliner;
 
 import 'package:analyzer/src/generated/element.dart';
+import 'package:analyzer/src/dart/constant/value.dart';
 import 'package:initialize/transformer.dart';
 import 'package:path/path.dart' as path;
 import '../src/normalize_path.dart';
@@ -61,9 +62,9 @@ class HtmlImportAnnotationRecorder implements InitializerPlugin {
 
     var originalImportPath;
     if (annotationElement.element is PropertyAccessorElement) {
-      originalImportPath = resolver
+      originalImportPath = (resolver
           .evaluateConstant(element.library, annotation.name)
-          .value
+          .value as DartObjectImpl)
           .fields['filePath']
           .toStringValue();
     } else {

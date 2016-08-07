@@ -147,7 +147,7 @@ void _moveHeadToWrapper(Document doc, Element wrapper) {
   var foundImport = false;
   for (var node in doc.head.nodes.toList(growable: false)) {
     if (node is! Element) continue;
-    var tag = node.localName;
+    var tag = (node as Element).localName;
     var type = node.attributes['type'];
     var rel = node.attributes['rel'];
     if (tag == 'link' && rel == 'import') foundImport = true;

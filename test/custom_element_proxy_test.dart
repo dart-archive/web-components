@@ -32,7 +32,7 @@ class ExtendedElement extends InputElement {
 }
 
 main() {
-  initWebComponents().then((_) {
+  return initWebComponents().then((_) {
     var container = querySelector('#container') as DivElement;
 
     tearDown(() {
@@ -49,8 +49,6 @@ main() {
         var elements = container.querySelectorAll('basic-element');
         expect(elements.length, 2);
         for (BasicElement element in elements) {
-          print(element.outerHtml);
-          print(element.runtimeType);
           expect(element.isBasicElement, isTrue);
         }
       });

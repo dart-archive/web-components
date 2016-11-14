@@ -1,6 +1,7 @@
 #### 0.12.4
   * Update to JS version
     [0.7.23](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.23).
+  * Update `analyzer`, `code_transformers`, and `html` version constraints.
 
 #### 0.12.3
   * Update to JS version

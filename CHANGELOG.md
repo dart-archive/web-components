@@ -1,3 +1,7 @@
+#### 0.12.5
+  * Update to not use deprecated analyzer apis.
+  * Update analyzer minimum version to 0.27.1.
+
 #### 0.12.4
   * Update to JS version
     [0.7.23](https://github.com/webcomponents/webcomponentsjs/tree/v0.7.23).

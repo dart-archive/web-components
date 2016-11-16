@@ -10,7 +10,7 @@ description: >
   elements, by hiding DOM subtrees under shadow roots. HTML Imports let authors
   bundle code and HTML as if they were libraries.
 dependencies:
-  analyzer: '>=0.27.0 <0.30.0'
+  analyzer: '>=0.27.1 <0.30.0'
   barback: '>=0.14.2 <0.16.0'
   code_transformers: '>=0.3.0 <0.6.0'
   html: '>=0.12.0 <0.14.0'

@@ -3,7 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 library web_components.build.html_import_recorder_inliner;
 
-import 'package:analyzer/src/generated/element.dart';
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:initialize/transformer.dart';
 import 'package:path/path.dart' as path;
 import '../src/normalize_path.dart';

@@ -1,3 +1,6 @@
+#### 0.12.5+1
+  * Update analyzer maximum version to 0.31.0.
+
 #### 0.12.5
   * Update to not use deprecated analyzer apis.
   * Update analyzer minimum version to 0.27.1.
